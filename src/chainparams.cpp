@@ -56,7 +56,11 @@ static void convertSeed6(std::vector<CAddress>& vSeedsOut, const SeedSpec6* data
 // + Contains no strange transactions
 static Checkpoints::MapCheckpoints mapCheckpoints = 
 	boost::assign::map_list_of
-        (0, uint256("0x000008d67dbdf5f9bb9fba21d36e90d31a0fac2235420faf57b949fe97937dee"));
+        (0, uint256("0x000008d67dbdf5f9bb9fba21d36e90d31a0fac2235420faf57b949fe97937dee"))
+        (5000, uint256("0xc9747810067fe5db3d557a827b692b5414f850c18e26c2037bdc112d6d6e5d39"))
+        (7500, uint256("0xbca6bb9a2913e5a62b73c5442327477f2ce9708d552ea21eb977fefa95612fab"))
+        (10000, uint256("0x8617b5bf88166dbd7949ad3e603f50b5c04e61981095d61b42666e1f37cfd470"));
+
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
     1568666856, // * UNIX timestamp of last checkpoint block
@@ -176,7 +180,6 @@ public:
         vSeeds.push_back(CDNSSeedData("108.61.205.10", "108.61.205.10"));
         vSeeds.push_back(CDNSSeedData("45.76.145.66", "45.76.145.66"));
         vSeeds.push_back(CDNSSeedData("149.28.186.121", "149.28.186.121"));
-	 vSeeds.push_back(CDNSSeedData("kubo.ultra-pool.com", "kubo.ultra-pool.com"));
 
 	base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 45);
 	base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 19);
