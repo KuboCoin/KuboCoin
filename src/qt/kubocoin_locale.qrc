@@ -1,0 +1,37 @@
+<!DOCTYPE RCC><RCC version="1.0">
+    <qresource prefix="/translations">
+        <file alias="bg">locale/kubocoin_bg.qm</file>
+        <file alias="ca">locale/kubocoin_ca.qm</file>
+        <file alias="cs">locale/kubocoin_cs.qm</file>
+        <file alias="da">locale/kubocoin_da.qm</file>
+        <file alias="de">locale/kubocoin_de.qm</file>
+        <file alias="en">locale/kubocoin_en.qm</file>
+        <file alias="en_GB">locale/kubocoin_en_GB.qm</file>
+        <file alias="en_US">locale/kubocoin_en_US.qm</file>
+        <file alias="eo">locale/kubocoin_eo.qm</file>
+        <file alias="es">locale/kubocoin_es.qm</file>
+        <file alias="es_ES">locale/kubocoin_es_ES.qm</file>
+        <file alias="fi">locale/kubocoin_fi.qm</file>
+        <file alias="fr_FR">locale/kubocoin_fr_FR.qm</file>
+        <file alias="hi_IN">locale/kubocoin_hi_IN.qm</file>
+        <file alias="hr">locale/kubocoin_hr.qm</file>
+        <file alias="hr_HR">locale/kubocoin_hr_HR.qm</file>
+        <file alias="it">locale/kubocoin_it.qm</file>
+        <file alias="ja">locale/kubocoin_ja.qm</file>
+        <file alias="ko_KR">locale/kubocoin_ko_KR.qm</file>
+        <file alias="lt_LT">locale/kubocoin_lt_LT.qm</file>
+        <file alias="nl">locale/kubocoin_nl.qm</file>
+        <file alias="pl">locale/kubocoin_pl.qm</file>
+        <file alias="pt">locale/kubocoin_pt.qm</file>
+        <file alias="pt_BR">locale/kubocoin_pt_BR.qm</file>
+        <file alias="ro_RO">locale/kubocoin_ro_RO.qm</file>
+        <file alias="ru">locale/kubocoin_ru.qm</file>
+        <file alias="sk">locale/kubocoin_sk.qm</file>
+        <file alias="sv">locale/kubocoin_sv.qm</file>
+        <file alias="tr">locale/kubocoin_tr.qm</file>
+        <file alias="uk">locale/kubocoin_uk.qm</file>
+        <file alias="vi">locale/kubocoin_vi.qm</file>
+        <file alias="zh_CN">locale/kubocoin_zh_CN.qm</file>
+        <file alias="zh_TW">locale/kubocoin_zh_TW.qm</file>
+    </qresource>
+</RCC>

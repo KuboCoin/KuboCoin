@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=kubocoin
+Comment=kubocoin P2P Cryptocurrency
+Exec=kubocoin-qt %u
+Terminal=false
+Type=Application
+Icon=kubocoin128
+MimeType=x-scheme-handler/kubocoin;
+Categories=Office;Finance;
+StartupWMClass=kubocoin-qt
+Name[en_US]=kubocoin-qt.desktop

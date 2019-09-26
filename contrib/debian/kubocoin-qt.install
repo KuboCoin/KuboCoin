@@ -1,0 +1,6 @@
+usr/local/bin/kubocoin-qt usr/bin
+share/pixmaps/kubocoin32.xpm usr/share/pixmaps
+share/pixmaps/kubocoin16.xpm usr/share/pixmaps
+share/pixmaps/kubocoin128.png usr/share/pixmaps
+debian/kubocoin-qt.desktop usr/share/applications
+debian/kubocoin-qt.protocol usr/share/kde4/services/

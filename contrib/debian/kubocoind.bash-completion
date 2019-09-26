@@ -1,0 +1,2 @@
+contrib/kubocoind.bash-completion	kubocoind
+contrib/kubocoin-cli.bash-completion kubocoin-cli
