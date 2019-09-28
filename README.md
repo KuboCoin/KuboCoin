@@ -29,7 +29,6 @@ More information at [kubocoin.org](https://kubocoin.org) Visit our ANN thread at
 ### Coin Specs
 <table>
 <tr><td>Algo</td><td>Quark</td></tr>
-<tr><td>Block Time</td><td>90 Seconds avg</td></tr>
 <tr><td>Difficulty Retargeting</td><td>Every Block</td></tr>
 <tr><td>Pre-Min info (PoW Phase)</td><td>89.7B KUBO for Kubo erc20 to main chain swap</td></tr>
 
