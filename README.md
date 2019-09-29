@@ -16,13 +16,11 @@ The Kubo team has been and will continue to be completely open and honest with o
 
 When it comes to Kubo, only the best will do. As a team, we are working to create and engage in meaningful alliances to enhance access to services and technology that will assist in the development of new pathways to help pave the way for global adoption of digital currencies. The Kubo team works cohesively with each other to bring experience, knowledge, and advancing technology to the forefront in order to provide our community with the highest quality project and product possible. We devote ourselves to continuous improvement, excellence, professionalism and innovation in our work.
 
-For more info about KuboCoin project. Please goto our web site.
+For more info about KuboCoin project. Please goto our web site. [kubocoin.org](https://kubocoin.org)
 
 
 ![KuboCoin Logo](https://i1.wp.com/kubocoin.org/wp-content/uploads/2019/05/Presentatie-LOGO-1.png?resize=300%2C292&ssl=1)
 
-
-More information at [kubocoin.org](https://kubocoin.org)
 
 ### Coin Specs
 <table>
