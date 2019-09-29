@@ -22,9 +22,7 @@ For more info about KuboCoin project. Please goto our web site.
 ![KuboCoin Logo](https://i1.wp.com/kubocoin.org/wp-content/uploads/2019/05/Presentatie-LOGO-1.png?resize=300%2C292&ssl=1)
 
 
-You bring value to the long term success of the project, not how much money you have in your pocket. Become an integral part of the network with minimal investment.
-
-More information at [kubocoin.org](https://kubocoin.org) Visit our ANN thread at [BitcoinTalk](https://bitcointalk.org/)
+More information at [kubocoin.org](https://kubocoin.org)
 
 ### Coin Specs
 <table>
