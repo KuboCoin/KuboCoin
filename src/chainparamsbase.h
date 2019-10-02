@@ -1,10 +1,9 @@
-// Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2016 The Dash developers
 // Copyright (c) 2015-2019 The PIVX developers
 // Copyright (c) 2018-2019 The DogeCash developers
 // Copyright (c) 2018-2019 The KuboCoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
-// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+// file COPYING or http://www.opensource.org/licenses/mit-license.php..
 
 #ifndef BITCOIN_CHAINPARAMSBASE_H
 #define BITCOIN_CHAINPARAMSBASE_H
