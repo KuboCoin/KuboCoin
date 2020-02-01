@@ -45,7 +45,7 @@ Configuring the github-merge tool for the kubocoin repository is done in the fol
 optimize-pngs.py
 ================
 
-A script to optimize png files in the KuboCoin
+A script to optimize png files in the kuboCoin
 repository (requires pngcrush).
 
 fix-copyright-headers.py

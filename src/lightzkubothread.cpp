@@ -1,9 +1,8 @@
-// Copyright (c) 2014-2016 The Dash developers
-// Copyright (c) 2015-2019 The PIVX developers
-// Copyright (c) 2018-2019 The DogeCash developers
-// Copyright (c) 2018-2019 The KuboCoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
+//
+// Copyright (c) 2015-2018 The kubocoin developers
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
+//
 
 
 #include "lightzkubothread.h"
@@ -61,7 +60,7 @@ void CLightWorker::ThreadLightzkuboSimplified() {
                                 heightStop
                         );
 
-                    } catch (NotEnoughMintsException e) {
+                    } catch (const NotEnoughMintsException& e) {
                         LogPrintStr(std::string("ThreadLightzkuboSimplified: ") + e.message + "\n");
                         rejectWork(genWit, blockHeight, NOT_ENOUGH_MINTS);
                         continue;
@@ -94,7 +93,7 @@ void CLightWorker::ThreadLightzkuboSimplified() {
                     rejectWork(genWit, blockHeight, NON_DETERMINED);
                 }
             }
-        } catch (std::exception& e) {
+        } catch (const std::exception& e) {
             //std::cout << "exception in light loop, closing it. " << e.what() << std::endl;
             PrintExceptionContinue(&e, "lightzkubothread");
             break;

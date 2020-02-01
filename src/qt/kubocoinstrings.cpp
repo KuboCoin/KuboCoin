@@ -32,7 +32,7 @@ QT_TRANSLATE_NOOP("kubocoin-core", ""
 QT_TRANSLATE_NOOP("kubocoin-core", ""
 "Calculated accumulator checkpoint is not what is recorded by block index"),
 QT_TRANSLATE_NOOP("kubocoin-core", ""
-"Cannot obtain a lock on data directory %s. KuboCoin Core is probably already "
+"Cannot obtain a lock on data directory %s. kuboCoin Core is probably already "
 "running."),
 QT_TRANSLATE_NOOP("kubocoin-core", ""
 "Change automatic finalized budget voting behavior. mode=auto: Vote for only "
@@ -210,7 +210,7 @@ QT_TRANSLATE_NOOP("kubocoin-core", ""
 "Total length of network version string (%i) exceeds maximum length (%i). "
 "Reduce the number or size of uacomments."),
 QT_TRANSLATE_NOOP("kubocoin-core", ""
-"Unable to bind to %s on this computer. KuboCoin Core is probably already running."),
+"Unable to bind to %s on this computer. kuboCoin Core is probably already running."),
 QT_TRANSLATE_NOOP("kubocoin-core", ""
 "Unable to locate enough Obfuscation denominated funds for this transaction."),
 QT_TRANSLATE_NOOP("kubocoin-core", ""
@@ -230,7 +230,7 @@ QT_TRANSLATE_NOOP("kubocoin-core", ""
 "pay if you send a transaction."),
 QT_TRANSLATE_NOOP("kubocoin-core", ""
 "Warning: Please check that your computer's date and time are correct! If "
-"your clock is wrong KuboCoin Core will not work properly."),
+"your clock is wrong kuboCoin Core will not work properly."),
 QT_TRANSLATE_NOOP("kubocoin-core", ""
 "Warning: The network does not appear to fully agree! Some miners appear to "
 "be experiencing issues."),
@@ -289,7 +289,7 @@ QT_TRANSLATE_NOOP("kubocoin-core", "Connect to a node to retrieve peer addresses
 QT_TRANSLATE_NOOP("kubocoin-core", "Connection options:"),
 QT_TRANSLATE_NOOP("kubocoin-core", "Copyright (C) 2009-%i The Bitcoin Core Developers"),
 QT_TRANSLATE_NOOP("kubocoin-core", "Copyright (C) 2014-%i The Dash Core Developers"),
-QT_TRANSLATE_NOOP("kubocoin-core", "Copyright (C) 2015-%i The KuboCoin Core Developers"),
+QT_TRANSLATE_NOOP("kubocoin-core", "Copyright (C) 2015-%i The kuboCoin Core Developers"),
 QT_TRANSLATE_NOOP("kubocoin-core", "Corrupted block database detected"),
 QT_TRANSLATE_NOOP("kubocoin-core", "Could not parse masternode.conf"),
 QT_TRANSLATE_NOOP("kubocoin-core", "Couldn't generate the accumulator witness"),
@@ -320,7 +320,7 @@ QT_TRANSLATE_NOOP("kubocoin-core", "Error initializing wallet database environme
 QT_TRANSLATE_NOOP("kubocoin-core", "Error loading block database"),
 QT_TRANSLATE_NOOP("kubocoin-core", "Error loading wallet.dat"),
 QT_TRANSLATE_NOOP("kubocoin-core", "Error loading wallet.dat: Wallet corrupted"),
-QT_TRANSLATE_NOOP("kubocoin-core", "Error loading wallet.dat: Wallet requires newer version of KuboCoin Core"),
+QT_TRANSLATE_NOOP("kubocoin-core", "Error loading wallet.dat: Wallet requires newer version of kuboCoin Core"),
 QT_TRANSLATE_NOOP("kubocoin-core", "Error opening block database"),
 QT_TRANSLATE_NOOP("kubocoin-core", "Error reading from database, shutting down."),
 QT_TRANSLATE_NOOP("kubocoin-core", "Error recovering public key."),
@@ -358,7 +358,7 @@ QT_TRANSLATE_NOOP("kubocoin-core", "Incompatible mode."),
 QT_TRANSLATE_NOOP("kubocoin-core", "Incompatible version."),
 QT_TRANSLATE_NOOP("kubocoin-core", "Incorrect or no genesis block found. Wrong datadir for network?"),
 QT_TRANSLATE_NOOP("kubocoin-core", "Information"),
-QT_TRANSLATE_NOOP("kubocoin-core", "Initialization sanity check failed. KuboCoin Core is shutting down."),
+QT_TRANSLATE_NOOP("kubocoin-core", "Initialization sanity check failed. kuboCoin Core is shutting down."),
 QT_TRANSLATE_NOOP("kubocoin-core", "Input is not valid."),
 QT_TRANSLATE_NOOP("kubocoin-core", "Insufficient funds"),
 QT_TRANSLATE_NOOP("kubocoin-core", "Insufficient funds."),
@@ -530,7 +530,7 @@ QT_TRANSLATE_NOOP("kubocoin-core", "Verifying blocks..."),
 QT_TRANSLATE_NOOP("kubocoin-core", "Verifying wallet..."),
 QT_TRANSLATE_NOOP("kubocoin-core", "Wallet %s resides outside data directory %s"),
 QT_TRANSLATE_NOOP("kubocoin-core", "Wallet is locked."),
-QT_TRANSLATE_NOOP("kubocoin-core", "Wallet needed to be rewritten: restart KuboCoin Core to complete"),
+QT_TRANSLATE_NOOP("kubocoin-core", "Wallet needed to be rewritten: restart kuboCoin Core to complete"),
 QT_TRANSLATE_NOOP("kubocoin-core", "Wallet options:"),
 QT_TRANSLATE_NOOP("kubocoin-core", "Wallet window title"),
 QT_TRANSLATE_NOOP("kubocoin-core", "Warning"),

@@ -1,0 +1,3 @@
+usr/local/bin/kubocoind usr/bin
+usr/local/bin/kubocoin-cli usr/bin
+debian/examples/kubocoin.conf etc/kubocoin

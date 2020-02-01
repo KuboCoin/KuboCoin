@@ -1,8 +1,8 @@
-// Copyright (c) 2014-2016 The Dash developers
-// Copyright (c) 2015-2019 The PIVX developers
-// Copyright (c) 2018-2019 The DogeCash developers
-// Copyright (c) 2018-2019 The KuboCoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2009-2010 Satoshi Nakamoto
+// Copyright (c) 2009-2014 The Bitcoin developers
+// Copyright (c) 2014-2015 The Dash developers
+// Copyright (c) 2015-2018 The kubocoin developers
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 /**
@@ -29,8 +29,16 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/thread/exceptions.hpp>
 #include <boost/thread/condition_variable.hpp> // for boost::thread_interrupted
-
-//kubocoin only features
+// Debugging macros
+// Uncomment the following line to enable debugging messages
+// or enable on a per file basis prior to inclusion of util.h
+//#define ENABLE_KUBOCOIN_DEBUG
+#ifdef ENABLE_KUBOCOIN_DEBUG
+#define DBG( x ) x
+#else
+#define DBG( x )
+#endif
+//PIVX only features
 
 extern bool fMasterNode;
 extern bool fLiteMode;
@@ -87,7 +95,7 @@ template<typename... Args> std::string FormatStringFromLogArgs(const char *fmt, 
         std::string _log_msg_; /* Unlikely name to avoid shadowing variables */                 \
         try {                                                                                   \
             _log_msg_ = tfm::format(format, TINYFORMAT_PASSARGS(n));                            \
-        } catch (std::runtime_error &e) {                                                       \
+        } catch (const std::runtime_error& e) {                                                       \
             _log_msg_ = "Error \"" + std::string(e.what()) + "\" while formatting log message: " + FormatStringFromLogArgs(format, TINYFORMAT_PASSARGS(n));\
         }                                                                                       \
         return LogPrintStr(_log_msg_);                                                          \
@@ -99,7 +107,7 @@ template<typename... Args> std::string FormatStringFromLogArgs(const char *fmt, 
         std::string _log_msg_; /* Unlikely name to avoid shadowing variables */                 \
         try {                                                                                   \
             _log_msg_ = tfm::format(format, TINYFORMAT_PASSARGS(n));                            \
-        } catch (std::runtime_error &e) {                                                       \
+        } catch (const std::runtime_error& e) {                                                       \
             _log_msg_ = "Error \"" + std::string(e.what()) + "\" while formatting log message: " + FormatStringFromLogArgs(format, TINYFORMAT_PASSARGS(n));\
         }                                                                                       \
         LogPrintStr(std::string("ERROR: ") + _log_msg_ + "\n");                                 \
@@ -125,7 +133,7 @@ static inline bool error(const char* format)
 
 double double_safe_addition(double fValue, double fIncrement);
 double double_safe_multiplication(double fValue, double fmultiplicator);
-void PrintExceptionContinue(std::exception* pex, const char* pszThread);
+void PrintExceptionContinue(const std::exception* pex, const char* pszThread);
 void ParseParameters(int argc, const char* const argv[]);
 void FileCommit(FILE* fileout);
 bool TruncateFile(FILE* file, unsigned int length);
@@ -141,6 +149,7 @@ boost::filesystem::path GetMasternodeConfigFile();
 boost::filesystem::path GetPidFile();
 void CreatePidFile(const boost::filesystem::path& path, pid_t pid);
 #endif
+void ClearDatadirCache();
 void ReadConfigFile(std::map<std::string, std::string>& mapSettingsRet, std::map<std::string, std::vector<std::string> >& mapMultiSettingsRet);
 #ifdef WIN32
 boost::filesystem::path GetSpecialFolderPath(int nFolder, bool fCreate = true);
@@ -235,10 +244,10 @@ void TraceThread(const char* name, Callable func)
         LogPrintf("%s thread start\n", name);
         func();
         LogPrintf("%s thread exit\n", name);
-    } catch (boost::thread_interrupted) {
+    } catch (const boost::thread_interrupted&) {
         LogPrintf("%s thread interrupt\n", name);
         throw;
-    } catch (std::exception& e) {
+    } catch (const std::exception& e) {
         PrintExceptionContinue(&e, name);
         throw;
     } catch (...) {

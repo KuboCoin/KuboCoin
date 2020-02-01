@@ -159,7 +159,7 @@ void PrivacyDialog::on_pushButtonMintzkubo_clicked()
     if (!walletModel || !walletModel->getOptionsModel())
         return;
 
-    if(GetAdjustedTime() > GetSporkValue(SPORK_16_ZEROCOIN_MAINTENANCE_MODE)) {
+    if(sporkManager.IsSporkActive(SPORK_16_ZEROCOIN_MAINTENANCE_MODE)) {
         QMessageBox::information(this, tr("Mint Zerocoin"),
                                  tr("zkubo is currently undergoing maintenance."), QMessageBox::Ok,
                                  QMessageBox::Ok);
@@ -271,7 +271,7 @@ void PrivacyDialog::on_pushButtonSpendzkubo_clicked()
     if (!walletModel || !walletModel->getOptionsModel() || !pwalletMain)
         return;
 
-    if(GetAdjustedTime() > GetSporkValue(SPORK_16_ZEROCOIN_MAINTENANCE_MODE)) {
+    if(sporkManager.IsSporkActive(SPORK_16_ZEROCOIN_MAINTENANCE_MODE)) {
         QMessageBox::information(this, tr("Mint Zerocoin"),
                                  tr("zkubo is currently undergoing maintenance."), QMessageBox::Ok, QMessageBox::Ok);
         return;
@@ -797,8 +797,9 @@ void PrivacyDialog::updateAutomintStatus()
 void PrivacyDialog::updateSPORK16Status()
 {
     // Update/enable labels, buttons and tooltips depending on the current SPORK_16 status
-    bool fButtonsEnabled =  ui->pushButtonMintzkubo->isEnabled();
-    bool fMaintenanceMode = GetAdjustedTime() > GetSporkValue(SPORK_16_ZEROCOIN_MAINTENANCE_MODE);
+    //bool fButtonsEnabled =  ui->pushButtonMintzPIV->isEnabled();
+    bool fButtonsEnabled = false;
+    bool fMaintenanceMode = sporkManager.IsSporkActive(SPORK_16_ZEROCOIN_MAINTENANCE_MODE);
     if (fMaintenanceMode && fButtonsEnabled) {
         // Mint zkubo
         ui->pushButtonMintzkubo->setEnabled(false);

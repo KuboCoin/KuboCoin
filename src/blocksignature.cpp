@@ -1,8 +1,5 @@
-// Copyright (c) 2014-2016 The Dash developers
-// Copyright (c) 2015-2019 The PIVX developers
-// Copyright (c) 2018-2019 The DogeCash developers
-// Copyright (c) 2018-2019 The KuboCoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2017-2019 The kubocoin developers
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "blocksignature.h"
@@ -25,8 +22,10 @@ bool GetKeyIDFromUTXO(const CTxOut& txout, CKeyID& keyID)
         return false;
     if (whichType == TX_PUBKEY) {
         keyID = CPubKey(vSolutions[0]).GetID();
-    } else if (whichType == TX_PUBKEYHASH) {
+    } else if (whichType == TX_PUBKEYHASH || whichType == TX_COLDSTAKE) {
         keyID = CKeyID(uint160(vSolutions[0]));
+    } else {
+        return false;
     }
 
     return true;
@@ -83,6 +82,12 @@ bool CheckBlockSignature(const CBlock& block)
         if (whichType == TX_PUBKEY || whichType == TX_PUBKEYHASH) {
             valtype& vchPubKey = vSolutions[0];
             pubkey = CPubKey(vchPubKey);
+        } else if (whichType == TX_COLDSTAKE) {
+            // pick the public key from the P2CS input
+            const CTxIn& txin = block.vtx[1].vin[0];
+            int start = 1 + (int) *txin.scriptSig.begin(); // skip sig
+            start += 1 + (int) *(txin.scriptSig.begin()+start); // skip flag
+            pubkey = CPubKey(txin.scriptSig.begin()+start+1, txin.scriptSig.end());
         }
     }
 

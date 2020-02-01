@@ -20,13 +20,13 @@ BEGIN
         BLOCK "040904E4" // U.S. English - multilingual (hex)
         BEGIN
             VALUE "CompanyName",        "kubocoin"
-            VALUE "FileDescription",    "KuboCoin Core (OSS GUI client for KuboCoin)"
+            VALUE "FileDescription",    "kuboCoin Core (OSS GUI client for kuboCoin)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
             VALUE "InternalName",       "kubocoin-qt"
             VALUE "LegalCopyright",     COPYRIGHT_STR
             VALUE "LegalTrademarks1",   "Distributed under the MIT/X11 software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php."
             VALUE "OriginalFilename",   "kubocoin-qt.exe"
-            VALUE "ProductName",        "KuboCoin Core"
+            VALUE "ProductName",        "kuboCoin Core"
             VALUE "ProductVersion",     VER_PRODUCTVERSION_STR
         END
     END

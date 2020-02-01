@@ -1,0 +1,8 @@
+/usr/bin/kubocoin-cli		--	gen_context(system_u:object_r:kubocoin_exec_t,s0)
+/usr/sbin/kubocoind		--	gen_context(system_u:object_r:kubocoin_exec_t,s0)
+/usr/lib(64)?/kubocoin/kubocoind		--	gen_context(system_u:object_r:kubocoin_exec_t,s0)
+
+/etc/kubocoin(/.*)?		gen_context(system_u:object_r:kubocoin_conf_t,s0)
+/var/lib/kubocoin(/.*)?		gen_context(system_u:object_r:kubocoin_var_lib_t,s0)
+
+(/var)?/run/kubocoind(/.*)?   gen_context(system_u:object_r:kubocoin_var_run_t,s0)

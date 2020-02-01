@@ -1,8 +1,8 @@
-// Copyright (c) 2014-2016 The Dash developers
-// Copyright (c) 2015-2019 The PIVX developers
-// Copyright (c) 2018-2019 The DogeCash developers
-// Copyright (c) 2018-2019 The KuboCoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2009-2010 Satoshi Nakamoto
+// Copyright (c) 2009-2014 The Bitcoin developers
+// Copyright (c) 2014-2015 The Dash developers
+// Copyright (c) 2015-2018 The kuboCoin developers
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #ifndef BITCOIN_CHAINPARAMS_H
@@ -26,7 +26,7 @@ struct CDNSSeedData {
 
 /**
  * CChainParams defines various tweakable parameters of a given instance of the
- * kubocoin system. There are three: the main network on which people trade goods
+ * kuboCoin system. There are three: the main network on which people trade goods
  * and services, the public test network which gets reset from time to time and
  * a regression test mode which is intended for private networks only. It has
  * minimal difficulty to ensure that blocks can be found instantly.
@@ -40,7 +40,7 @@ public:
         SECRET_KEY,     // BIP16
         EXT_PUBLIC_KEY, // BIP32
         EXT_SECRET_KEY, // BIP32
-        EXT_COIN_TYPE,  // BIP44
+        STAKING_ADDRESS,
 
         MAX_BASE58_TYPES
     };
@@ -72,11 +72,19 @@ public:
     bool SkipProofOfWorkCheck() const { return fSkipProofOfWorkCheck; }
     /** Make standard checks */
     bool RequireStandard() const { return fRequireStandard; }
-    int64_t TargetTimespan() const { return nTargetTimespan; }
     int64_t TargetSpacing() const { return nTargetSpacing; }
-    int64_t Interval() const { return nTargetTimespan / nTargetSpacing; }
+        /** returns the coinbase maturity **/
     int COINBASE_MATURITY() const { return nMaturity; }
+
+    /** returns the coinstake maturity (min depth required) **/
+    int COINSTAKE_MIN_DEPTH() const { return nStakeMinDepth; }
+    bool HasStakeMinAgeOrDepth(const int contextHeight, const uint32_t contextTime, const int utxoFromBlockHeight, const uint32_t utxoFromBlockTime) const;
+
+    /** returns the max future time (and drift in seconds) allowed for a block in the future **/
+    int FutureBlockTimeDrift(const bool isPoS) const { return isPoS ? nFutureTimeDriftPoS : nFutureTimeDriftPoW; }
+    uint32_t MaxFutureBlockTime(uint32_t time, const bool isPoS) const { return time + FutureBlockTimeDrift(isPoS); }
     CAmount MaxMoneyOut() const { return nMaxMoneyOut; }
+    CAmount nStakeMinInput() const { return nStakeCollateralMin; }
     /** The masternode count that we will allow the see-saw reward payments to be off by */
     int MasternodeCountDrift() const { return nMasternodeCountDrift; }
     //declare and match all functions later for global use
@@ -90,6 +98,7 @@ public:
     std::string NetworkIDString() const { return strNetworkID; }
     const std::vector<CDNSSeedData>& DNSSeeds() const { return vSeeds; }
     const std::vector<unsigned char>& Base58Prefix(Base58Type type) const { return base58Prefixes[type]; }
+    int ExtCoinType() const { return nExtCoinType; }
     const std::vector<CAddress>& FixedSeeds() const { return vFixedSeeds; }
     virtual const Checkpoints::CCheckpointData& Checkpoints() const = 0;
     int PoolMaxTransactions() const { return nPoolMaxTransactions; }
@@ -97,9 +106,11 @@ public:
     int GetBudgetCycleBlocks() const { return nBudgetCycleBlocks; }
     int64_t GetProposalEstablishmentTime() const { return nProposalEstablishmentTime; }
 
+    CAmount GetMinColdStakingAmount() const { return nMinColdStakingAmount; }
+
     /** Spork key and Masternode Handling **/
-    std::string SporkKey() const { return strSporkKey; }
-    std::string SporkKeyOld() const { return strSporkKeyOld; }
+    std::string SporkPubKey() const { return strSporkPubKey; }
+    std::string SporkPubKeyOld() const { return strSporkPubKeyOld; }
     int64_t NewSporkStart() const { return nEnforceNewSporkKey; }
     int64_t RejectOldSporkKey() const { return nRejectOldSporkKey; }
     std::string ObfuscationPoolDummyAddress() const { return strObfuscationPoolDummyAddress; }
@@ -130,6 +141,10 @@ public:
     int Zerocoin_StartTime() const { return nZerocoinStartTime; }
     int Block_Enforce_Invalid() const { return nBlockEnforceInvalidUTXO; }
     int Zerocoin_Block_V2_Start() const { return nBlockZerocoinV2; }
+    int NewSigsActive(const int nHeight) const { return nHeight >= nBlockEnforceNewMessageSignatures; }
+    bool IsStakeModifierV2(const int nHeight) const { return nHeight >= nBlockStakeModifierlV2; }
+    bool Cold_Staking_Enabled(const int height) const { return height >= nColdStakingStart; }
+    int Block_Enforce_Cold_Staking() const { return nColdStakingStart; }
 
     // fake serial attack
     int Zerocoin_Block_EndFakeSerial() const { return nFakeSerialBlockheightEnd; }
@@ -152,7 +167,6 @@ protected:
     int nEnforceBlockUpgradeMajority;
     int nRejectBlockOutdatedMajority;
     int nToCheckBlockUpgradeMajority;
-    int64_t nTargetTimespan;
     int64_t nTargetSpacing;
     int nLastPOWBlock;
     int nMinStakeReserve;
@@ -160,10 +174,17 @@ protected:
     int nMasternodeCountDrift;
     int nMaturity;
     int nModifierUpdateBlock;
+    int nStakeMinDepth;
+    int nFutureTimeDriftPoW;
+    int nFutureTimeDriftPoS;
+    //Stake Protocol Switch
+    int nBlockNewStakeProtocol;
+    CAmount nStakeCollateralMin;
     CAmount nMaxMoneyOut;
     int nMinerThreads;
     std::vector<CDNSSeedData> vSeeds;
     std::vector<unsigned char> base58Prefixes[MAX_BASE58_TYPES];
+    int nExtCoinType;
     CBaseChainParams::Network networkID;
     std::string strNetworkID;
     CBlock genesis;
@@ -176,10 +197,11 @@ protected:
     bool fSkipProofOfWorkCheck;
     bool fTestnetToBeDeprecatedFieldRPC;
     bool fHeadersFirstSyncingActive;
+    bool fStakeMinDepth;
     int nPoolMaxTransactions;
     int nBudgetCycleBlocks;
-    std::string strSporkKey;
-    std::string strSporkKeyOld;
+    std::string strSporkPubKey;
+    std::string strSporkPubKeyOld;
     int64_t nEnforceNewSporkKey;
     int64_t nRejectOldSporkKey;
     std::string strObfuscationPoolDummyAddress;
@@ -205,7 +227,10 @@ protected:
     int nBlockEnforceInvalidUTXO;
     int nBlockZerocoinV2;
     int nBlockDoubleAccumulated;
-
+    int nBlockEnforceNewMessageSignatures;
+    int nBlockStakeModifierlV2;
+    int nColdStakingStart;
+    CAmount nMinColdStakingAmount;
     // fake serial attack
     int nFakeSerialBlockheightEnd = 0;
     CAmount nSupplyBeforeFakeSerial = 0;

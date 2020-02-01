@@ -41,11 +41,11 @@ QString BitcoinUnits::id(int unit)
 {
     switch (unit) {
     case KUBO:
-        return QString("KuboCoin");
+        return QString("kuboCoin");
     case mKUBO:
-        return QString("mKuboCoin");
+        return QString("mkuboCoin");
     case uKUBO:
-        return QString::fromUtf8("uKuboCoin");
+        return QString::fromUtf8("ukuboCoin");
     default:
         return QString("???");
     }

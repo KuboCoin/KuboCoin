@@ -359,11 +359,12 @@ def disconnect_nodes(from_connection, node_num):
     wait_until(lambda: [peer['addr'] for peer in from_connection.getpeerinfo() if "testnode%d" % node_num in peer['subver']] == [], timeout=5)
 
 def connect_nodes(from_connection, node_num):
-    ip_port = "127.0.0.1:" + str(p2p_port(node_num))
+    ip_port = "127.0.0.1:"+str(p2p_port(node_num))
     from_connection.addnode(ip_port, "onetry")
     # poll until version handshake complete to avoid race conditions
     # with transaction relaying
-    wait_until(lambda:  all(peer['version'] != 0 for peer in from_connection.getpeerinfo()))
+    while any(peer['version'] == 0 for peer in from_connection.getpeerinfo()):
+        time.sleep(0.1)
 
 def connect_nodes_bi(nodes, a, b):
     connect_nodes(nodes[a], b)
@@ -372,7 +373,6 @@ def connect_nodes_bi(nodes, a, b):
 def sync_blocks(rpc_connections, *, wait=1, timeout=60):
     """
     Wait until everybody has the same tip.
-
     sync_blocks needs to be called with an rpc_connections set that has least
     one node already synced to the latest, stable tip, otherwise there's a
     chance it might return before all nodes are stably synced.

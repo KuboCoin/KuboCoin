@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=kubocoin
+Comment=kubocoin P2P Cryptocurrency
+Comment[fr]=kubocoin, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=kubocoin, eşten eşe kriptografik sanal para birimi
+Exec=kubocoin-qt %u
+Terminal=false
+Type=Application
+Icon=kubocoin128
+MimeType=x-scheme-handler/kubocoin;
+Categories=Office;Finance;
+StartupWMClass=kubocoin-qt

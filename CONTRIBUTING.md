@@ -1,7 +1,7 @@
-Contributing to KuboCoin Core
+Contributing to kuboCoin Core
 ============================
 
-The KuboCoin Core project operates an open contributor model where anyone is
+The kuboCoin Core project operates an open contributor model where anyone is
 welcome to contribute towards development in the form of peer review, testing
 and patches. This document explains the practical process and guidelines for
 contributing.
@@ -157,10 +157,10 @@ where possible keep them short, un-complex and easy to verify.
 "Decision Making" Process
 -------------------------
 
-The following applies to code changes to the KuboCoin Core project, and is not to be
-confused with overall KuboCoin Network Protocol consensus changes.
+The following applies to code changes to the kuboCoin Core project, and is not to be
+confused with overall kuboCoin Network Protocol consensus changes.
 
-Whether a pull request is merged into KuboCoin Core rests with the project merge
+Whether a pull request is merged into kuboCoin Core rests with the project merge
 maintainers and ultimately the project lead.
 
 Maintainers will take into consideration if a patch is in line with the general
@@ -214,7 +214,7 @@ higher in terms of discussion and peer review requirements, keeping in mind that
 mistakes could be very costly to the wider community. This includes refactoring
 of consensus critical code.
 
-Where a patch set proposes to change the KuboCoin consensus, it must have been
+Where a patch set proposes to change the kuboCoin consensus, it must have been
 discussed extensively on the forums and Discord, be accompanied by a widely
 discussed Proposal and have a generally widely perceived technical consensus of being
 a worthwhile change based on the judgement of the maintainers.
@@ -254,7 +254,7 @@ about:
 Release Policy
 --------------
 
-The project leader is the release manager for each KuboCoin Core release.
+The project leader is the release manager for each kuboCoin Core release.
 
 Copyright
 ---------

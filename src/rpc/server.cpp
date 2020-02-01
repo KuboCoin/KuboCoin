@@ -12,7 +12,7 @@
 #include "main.h"
 #include "random.h"
 #include "sync.h"
-#include "ui_interface.h"
+#include "guiinterface.h"
 #include "util.h"
 #include "utilstrencodings.h"
 
@@ -117,7 +117,7 @@ CAmount AmountFromValue(const UniValue& value)
         throw JSONRPCError(RPC_TYPE_ERROR, "Amount is not a number");
 
     double dAmount = value.get_real();
-    if (dAmount <= 0.0 || dAmount > 1000000000.1)
+    if (dAmount <= 0.0 || dAmount > 5100000000.0) //5.1billion max RPC limit. This can be changed to your liking for your platform.
         throw JSONRPCError(RPC_TYPE_ERROR, "Invalid amount");
     CAmount nAmount = roundint64(dAmount * COIN);
     if (!MoneyRange(nAmount))
@@ -218,7 +218,7 @@ string CRPCTable::help(string strCommand) const
             rpcfn_type pfn = pcmd->actor;
             if (setDone.insert(pfn).second)
                 (*pfn)(params, true);
-        } catch (std::exception& e) {
+        } catch (const std::exception& e) {
             // Help text is returned in an exception
             string strHelp = string(e.what());
             if (strCommand == "") {
@@ -241,6 +241,32 @@ string CRPCTable::help(string strCommand) const
         strRet = strprintf("help: unknown command: %s\n", strCommand);
     strRet = strRet.substr(0, strRet.size() - 1);
     return strRet;
+    }
+
+UniValue makekeypair(const UniValue& params, bool fHelp)
+{
+    if (fHelp || params.size() > 1)
+        throw runtime_error(
+            "makekeypair [prefix]\n"
+            "Make a public/private key pair.\n"
+            "[prefix] is optional preferred prefix for the public key.\n");
+
+    string strPrefix = "";
+    if (params.size() > 0)
+        strPrefix = params[0].get_str();
+
+    CKey key;
+    key.MakeNewKey(false);
+
+    CPrivKey vchPrivKey = key.GetPrivKey();
+    UniValue result(UniValue::VOBJ);
+    result.push_back(Pair("PrivateKey", HexStr<CPrivKey::iterator>(vchPrivKey.begin(), vchPrivKey.end())));
+    result.push_back(Pair("PublicKey", HexStr(key.GetPubKey())));
+
+    CBitcoinSecret bkey(key);
+    result.push_back(Pair("PrivKeyBase58",bkey.ToString()));
+
+    return result;
 }
 
 UniValue help(const UniValue& params, bool fHelp)
@@ -352,6 +378,7 @@ static const CRPCCommand vRPCCommands[] =
         /* Utility functions */
         {"util", "createmultisig", &createmultisig, true, true, false},
         {"util", "validateaddress", &validateaddress, true, false, false}, /* uses wallet if enabled */
+        {"util", "createsporkkeypair", &createsporkkeypair, true, false, false}, /* uses wallet if enabled */
         {"util", "verifymessage", &verifymessage, true, false, false},
         {"util", "estimatefee", &estimatefee, true, true, false},
         {"util", "estimatepriority", &estimatepriority, true, true, false},
@@ -394,16 +421,21 @@ static const CRPCCommand vRPCCommands[] =
         {"kubocoin", "mnsync", &mnsync, true, true, false},
         {"kubocoin", "spork", &spork, true, true, false},
         {"kubocoin", "getpoolinfo", &getpoolinfo, true, true, false},
+        {"kubocoin", "makekeypair", &makekeypair, true, true, false},
+
 
 #ifdef ENABLE_WALLET
         /* Wallet */
         {"wallet", "addmultisigaddress", &addmultisigaddress, true, false, true},
         {"wallet", "autocombinerewards", &autocombinerewards, false, false, true},
         {"wallet", "backupwallet", &backupwallet, true, false, true},
+        {"wallet", "delegatestake", &delegatestake, false, false, true},
         {"wallet", "enableautomintaddress", &enableautomintaddress, true, false, true},
         {"wallet", "createautomintaddress", &createautomintaddress, true, false, true},
         {"wallet", "dumpprivkey", &dumpprivkey, true, false, true},
+        {"wallet", "dumphdinfo", &dumphdinfo, true, false, true},
         {"wallet", "dumpwallet", &dumpwallet, true, false, true},
+//        {"wallet", "dumpwallethd", &dumpwallethd, true, false, true},
         {"wallet", "bip38encrypt", &bip38encrypt, true, false, true},
         {"wallet", "bip38decrypt", &bip38decrypt, true, false, true},
         {"wallet", "encryptwallet", &encryptwallet, true, false, true},
@@ -411,13 +443,18 @@ static const CRPCCommand vRPCCommands[] =
         {"wallet", "getaccount", &getaccount, true, false, true},
         {"wallet", "getaddressesbyaccount", &getaddressesbyaccount, true, false, true},
         {"wallet", "getbalance", &getbalance, false, false, true},
+        {"wallet", "getcoldstakingbalance", &getcoldstakingbalance, false, false, true},
+        {"wallet", "getdelegatedbalance", &getdelegatedbalance, false, false, true},
         {"wallet", "getnewaddress", &getnewaddress, true, false, true},
+        {"wallet", "getxpubkey", &getxpubkey, true, false, true},
+        {"wallet", "getnewstakingaddress", &getnewstakingaddress, true, false, true},
         {"wallet", "getrawchangeaddress", &getrawchangeaddress, true, false, true},
         {"wallet", "getreceivedbyaccount", &getreceivedbyaccount, false, false, true},
         {"wallet", "getreceivedbyaddress", &getreceivedbyaddress, false, false, true},
         {"wallet", "getstakingstatus", &getstakingstatus, false, false, true},
         {"wallet", "getstakesplitthreshold", &getstakesplitthreshold, false, false, true},
         {"wallet", "gettransaction", &gettransaction, false, false, true},
+        {"wallet", "abandontransaction", &abandontransaction, false, false, true},
         {"wallet", "getunconfirmedbalance", &getunconfirmedbalance, false, false, true},
         {"wallet", "getwalletinfo", &getwalletinfo, false, false, true},
         {"wallet", "importprivkey", &importprivkey, true, false, true},
@@ -425,7 +462,10 @@ static const CRPCCommand vRPCCommands[] =
         {"wallet", "importaddress", &importaddress, true, false, true},
         {"wallet", "keypoolrefill", &keypoolrefill, true, false, true},
         {"wallet", "listaccounts", &listaccounts, false, false, true},
+        {"wallet", "listdelegators", &listdelegators, false, false, true},
+        {"wallet", "liststakingaddresses", &liststakingaddresses, false, false, true},
         {"wallet", "listaddressgroupings", &listaddressgroupings, false, false, true},
+        {"wallet", "listcoldutxos", &listcoldutxos, false, false, true},
         {"wallet", "listlockunspent", &listlockunspent, false, false, true},
         {"wallet", "listreceivedbyaccount", &listreceivedbyaccount, false, false, true},
         {"wallet", "listreceivedbyaddress", &listreceivedbyaddress, false, false, true},
@@ -435,6 +475,7 @@ static const CRPCCommand vRPCCommands[] =
         {"wallet", "lockunspent", &lockunspent, true, false, true},
         {"wallet", "move", &movecmd, false, false, true},
         {"wallet", "multisend", &multisend, false, false, true},
+        {"wallet", "rawdelegatestake", &rawdelegatestake, false, false, true},
         {"wallet", "sendfrom", &sendfrom, false, false, true},
         {"wallet", "sendmany", &sendmany, false, false, true},
         {"wallet", "sendtoaddress", &sendtoaddress, false, false, true},
@@ -447,6 +488,8 @@ static const CRPCCommand vRPCCommands[] =
         {"wallet", "walletpassphrasechange", &walletpassphrasechange, true, false, true},
         {"wallet", "walletpassphrase", &walletpassphrase, true, false, true},
         {"wallet", "burn", &burn, true, false, false}, /* uses wallet if enabled */
+        {"wallet", "delegatoradd", &delegatoradd, true, false, true},
+        {"wallet", "delegatorremove", &delegatorremove, true, false, true},
 
         {"zerocoin", "createrawzerocoinstake", &createrawzerocoinstake, false, false, true},
         {"zerocoin", "getzerocoinbalance", &getzerocoinbalance, false, false, true},
@@ -584,7 +627,7 @@ static UniValue JSONRPCExecOne(const UniValue& req)
         rpc_result = JSONRPCReplyObj(result, NullUniValue, jreq.id);
     } catch (const UniValue& objError) {
         rpc_result = JSONRPCReplyObj(NullUniValue, objError, jreq.id);
-    } catch (std::exception& e) {
+    } catch (const std::exception& e) {
         rpc_result = JSONRPCReplyObj(NullUniValue,
             JSONRPCError(RPC_PARSE_ERROR, e.what()), jreq.id);
     }
@@ -613,7 +656,7 @@ UniValue CRPCTable::execute(const std::string &strMethod, const UniValue &params
     try {
         // Execute
         return pcmd->actor(params, false);
-    } catch (std::exception& e) {
+    } catch (const std::exception& e) {
         throw JSONRPCError(RPC_MISC_ERROR, e.what());
     }
 

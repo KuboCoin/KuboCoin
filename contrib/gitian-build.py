@@ -23,13 +23,13 @@ def setup():
         programs += ['lxc', 'debootstrap']
     subprocess.check_call(['sudo', 'apt-get', 'install', '-qq'] + programs)
     if not os.path.isdir('gitian.sigs'):
-        subprocess.check_call(['git', 'clone', 'https://github.com/kubocoin-Project/gitian.sigs.git'])
+        subprocess.check_call(['git', 'clone', 'https://github.com/kubocoin/gitian.sigs.git'])
     if not os.path.isdir('kubocoin-detached-sigs'):
-        subprocess.check_call(['git', 'clone', 'https://github.com/kubocoin-Project/kubocoin-detached-sigs.git'])
+        subprocess.check_call(['git', 'clone', 'https://github.com/kubocoin/kubocoin-detached-sigs.git'])
     if not os.path.isdir('gitian-builder'):
         subprocess.check_call(['git', 'clone', 'https://github.com/devrandom/gitian-builder.git'])
     if not os.path.isdir('kubocoin'):
-        subprocess.check_call(['git', 'clone', 'https://github.com/kubocoin-Project/kubocoin.git'])
+        subprocess.check_call(['git', 'clone', 'https://github.com/kubocoin/kubocoin.git'])
     os.chdir('gitian-builder')
     make_image_prog = ['bin/make-base-vm', '--suite', 'bionic', '--arch', 'amd64']
     if args.docker:
@@ -59,21 +59,21 @@ def build():
         print('\nCompiling ' + args.version + ' Linux')
         subprocess.check_call(['bin/gbuild', '-j', args.jobs, '-m', args.memory, '--commit', 'kubocoin='+args.commit, '--url', 'kubocoin='+args.url, '../kubocoin/contrib/gitian-descriptors/gitian-linux.yml'])
         subprocess.check_call(['bin/gsign', '-p', args.sign_prog, '--signer', args.signer, '--release', args.version+'-linux', '--destination', '../gitian.sigs/', '../kubocoin/contrib/gitian-descriptors/gitian-linux.yml'])
-        subprocess.check_call('mv build/out/kubocoin-*.tar.gz build/out/src/kubocoin-*.tar.gz ../kubocoin-binaries/'+args.version, shell=True)
+        subprocess.check_call('mv build/out/kuboCoin-*.tar.gz build/out/src/kuboCoin-*.tar.gz ../kubocoin-binaries/'+args.version, shell=True)
 
     if args.windows:
         print('\nCompiling ' + args.version + ' Windows')
         subprocess.check_call(['bin/gbuild', '-j', args.jobs, '-m', args.memory, '--commit', 'kubocoin='+args.commit, '--url', 'kubocoin='+args.url, '../kubocoin/contrib/gitian-descriptors/gitian-win.yml'])
         subprocess.check_call(['bin/gsign', '-p', args.sign_prog, '--signer', args.signer, '--release', args.version+'-win-unsigned', '--destination', '../gitian.sigs/', '../kubocoin/contrib/gitian-descriptors/gitian-win.yml'])
-        subprocess.check_call('mv build/out/kubocoin-*-win-unsigned.tar.gz inputs/', shell=True)
-        subprocess.check_call('mv build/out/kubocoin-*.zip build/out/kubocoin-*.exe ../kubocoin-binaries/'+args.version, shell=True)
+        subprocess.check_call('mv build/out/kuboCoin-*-win-unsigned.tar.gz inputs/', shell=True)
+        subprocess.check_call('mv build/out/kuboCoin-*.zip build/out/kuboCoin-*.exe ../kubocoin-binaries/'+args.version, shell=True)
 
     if args.macos:
         print('\nCompiling ' + args.version + ' MacOS')
         subprocess.check_call(['bin/gbuild', '-j', args.jobs, '-m', args.memory, '--commit', 'kubocoin='+args.commit, '--url', 'kubocoin='+args.url, '../kubocoin/contrib/gitian-descriptors/gitian-osx.yml'])
         subprocess.check_call(['bin/gsign', '-p', args.sign_prog, '--signer', args.signer, '--release', args.version+'-osx-unsigned', '--destination', '../gitian.sigs/', '../kubocoin/contrib/gitian-descriptors/gitian-osx.yml'])
-        subprocess.check_call('mv build/out/kubocoin-*-osx-unsigned.tar.gz inputs/', shell=True)
-        subprocess.check_call('mv build/out/kubocoin-*.tar.gz build/out/kubocoin-*.dmg ../kubocoin-binaries/'+args.version, shell=True)
+        subprocess.check_call('mv build/out/kuboCoin-*-osx-unsigned.tar.gz inputs/', shell=True)
+        subprocess.check_call('mv build/out/kuboCoin-*.tar.gz build/out/kuboCoin-*.dmg ../kubocoin-binaries/'+args.version, shell=True)
 
     os.chdir(workdir)
 
@@ -99,15 +99,15 @@ def sign():
         subprocess.check_call('cp inputs/kubocoin-' + args.version + '-win-unsigned.tar.gz inputs/kubocoin-win-unsigned.tar.gz', shell=True)
         subprocess.check_call(['bin/gbuild', '-i', '--commit', 'signature='+args.commit, '../kubocoin/contrib/gitian-descriptors/gitian-win-signer.yml'])
         subprocess.check_call(['bin/gsign', '-p', args.sign_prog, '--signer', args.signer, '--release', args.version+'-win-signed', '--destination', '../gitian.sigs/', '../kubocoin/contrib/gitian-descriptors/gitian-win-signer.yml'])
-        subprocess.check_call('mv build/out/kubocoin-*win64-setup.exe ../kubocoin-binaries/'+args.version, shell=True)
-        subprocess.check_call('mv build/out/kubocoin-*win32-setup.exe ../kubocoin-binaries/'+args.version, shell=True)
+        subprocess.check_call('mv build/out/kuboCoin-*win64-setup.exe ../kubocoin-binaries/'+args.version, shell=True)
+        subprocess.check_call('mv build/out/kuboCoin-*win32-setup.exe ../kubocoin-binaries/'+args.version, shell=True)
 
     if args.macos:
         print('\nSigning ' + args.version + ' MacOS')
         subprocess.check_call('cp inputs/kubocoin-' + args.version + '-osx-unsigned.tar.gz inputs/kubocoin-osx-unsigned.tar.gz', shell=True)
         subprocess.check_call(['bin/gbuild', '-i', '--commit', 'signature='+args.commit, '../kubocoin/contrib/gitian-descriptors/gitian-osx-signer.yml'])
         subprocess.check_call(['bin/gsign', '-p', args.sign_prog, '--signer', args.signer, '--release', args.version+'-osx-signed', '--destination', '../gitian.sigs/', '../kubocoin/contrib/gitian-descriptors/gitian-osx-signer.yml'])
-        subprocess.check_call('mv build/out/kubocoin-osx-signed.dmg ../kubocoin-binaries/'+args.version+'/kubocoin-'+args.version+'-osx.dmg', shell=True)
+        subprocess.check_call('mv build/out/kuboCoin-osx-signed.dmg ../kubocoin-binaries/'+args.version+'/kubocoin-'+args.version+'-osx.dmg', shell=True)
 
     os.chdir(workdir)
 
@@ -155,7 +155,7 @@ def main():
     parser = argparse.ArgumentParser(usage='%(prog)s [options] signer version')
     parser.add_argument('-c', '--commit', action='store_true', dest='commit', help='Indicate that the version argument is for a commit or branch')
     parser.add_argument('-p', '--pull', action='store_true', dest='pull', help='Indicate that the version argument is the number of a github repository pull request')
-    parser.add_argument('-u', '--url', dest='url', default='https://github.com/kubocoin-Project/kubocoin', help='Specify the URL of the repository. Default is %(default)s')
+    parser.add_argument('-u', '--url', dest='url', default='https://github.com/kubocoin/kubocoin', help='Specify the URL of the repository. Default is %(default)s')
     parser.add_argument('-v', '--verify', action='store_true', dest='verify', help='Verify the Gitian build')
     parser.add_argument('-b', '--build', action='store_true', dest='build', help='Do a Gitian build')
     parser.add_argument('-s', '--sign', action='store_true', dest='sign', help='Make signed binaries for Windows and MacOS')

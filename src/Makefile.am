@@ -1,8 +1,5 @@
-# Copyright (c) 2014-2016 The Dash developers
-# Copyright (c) 2015-2019 The PIVX developers
-# Copyright (c) 2018-2019 The DogeCash developers
-# Copyright (c) 2018-2019 The KuboCoin developers
-# Distributed under the MIT/X11 software license, see the accompanying
+# Copyright (c) 2013-2016 The Bitcoin Core developers
+# Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 DIST_SUBDIRS = secp256k1 univalue
@@ -85,6 +82,8 @@ BITCOIN_CORE_H = \
   allocators.h \
   amount.h \
   base58.h \
+  bip39.h \
+  bip39_english.h \
   bip38.h \
   bloom.h \
   blocksignature.h \
@@ -102,6 +101,7 @@ BITCOIN_CORE_H = \
   compat/endian.h \
   compat/sanity.h \
   compressor.h \
+  consensus/merkle.h \
   primitives/block.h \
   primitives/transaction.h \
   core_io.h \
@@ -111,6 +111,7 @@ BITCOIN_CORE_H = \
   obfuscation-relay.h \
   wallet/db.h \
   hash.h \
+  hdchain.h \
   httprpc.h \
   httpserver.h \
   init.h \
@@ -124,7 +125,6 @@ BITCOIN_CORE_H = \
   leveldbwrapper.h \
   limitedmap.h \
   main.h \
-  upgrade_check.h \
   masternode.h \
   masternode-payments.h \
   masternode-budget.h \
@@ -132,6 +132,7 @@ BITCOIN_CORE_H = \
   masternodeman.h \
   masternodeconfig.h \
   merkleblock.h \
+  messagesigner.h \
   miner.h \
   mruset.h \
   netbase.h \
@@ -156,6 +157,7 @@ BITCOIN_CORE_H = \
   serialize.h \
   spork.h \
   sporkdb.h \
+  sporkid.h \
   stakeinput.h \
   streams.h \
   support/cleanse.h \
@@ -166,7 +168,7 @@ BITCOIN_CORE_H = \
   torcontrol.h \
   txdb.h \
   txmempool.h \
-  ui_interface.h \
+  guiinterface.h \
   uint256.h \
   undo.h \
   util.h \
@@ -238,7 +240,6 @@ libbitcoin_server_a_SOURCES = \
   torcontrol.cpp \
   txdb.cpp \
   txmempool.cpp \
-  upgrade_check.cpp \
   validationinterface.cpp \
   zkubochain.cpp \
   $(BITCOIN_CORE_H)
@@ -271,6 +272,7 @@ libbitcoin_wallet_a_SOURCES = \
   masternode-sync.cpp \
   masternodeconfig.cpp \
   masternodeman.cpp \
+  messagesigner.cpp \
   wallet/rpcdump.cpp \
   wallet/rpcwallet.cpp \
   kernel.cpp \
@@ -296,6 +298,8 @@ crypto_libbitcoin_crypto_a_SOURCES = \
   crypto/sha1.cpp \
   crypto/sha256.cpp \
   crypto/sha512.cpp \
+  crypto/chacha20.h \
+  crypto/chacha20.cpp \
   crypto/hmac_sha256.cpp \
   crypto/rfc6979_hmac_sha256.cpp \
   crypto/hmac_sha512.cpp \
@@ -368,10 +372,12 @@ libbitcoin_common_a_SOURCES = \
   allocators.cpp \
   amount.cpp \
   base58.cpp \
+  bip39.cpp \
   bip38.cpp \
   chainparams.cpp \
   coins.cpp \
   compressor.cpp \
+  consensus/merkle.cpp \
   primitives/block.cpp \
   zkubo/deterministicmint.cpp \
   primitives/transaction.cpp \
@@ -379,6 +385,7 @@ libbitcoin_common_a_SOURCES = \
   core_read.cpp \
   core_write.cpp \
   hash.cpp \
+  hdchain.cpp \
   invalid.cpp \
   key.cpp \
   keystore.cpp \
@@ -402,6 +409,8 @@ libbitcoin_util_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
 libbitcoin_util_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libbitcoin_util_a_SOURCES = \
   allocators.cpp \
+  arith_uint256.cpp \
+  arith_uint256.h \
   chainparamsbase.cpp \
   clientversion.cpp \
   compat/glibc_sanity.cpp \

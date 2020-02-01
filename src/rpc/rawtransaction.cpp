@@ -772,9 +772,17 @@ UniValue signrawtransaction(const UniValue& params, bool fHelp)
         const CScript& prevPubKey = (Params().NetworkID() == CBaseChainParams::REGTEST && mapPrevOut.count(txin.prevout) != 0 ? mapPrevOut[txin.prevout] : coins->vout[txin.prevout.n].scriptPubKey);
 
         txin.scriptSig.clear();
+
+        // if this is a P2CS script, select which key to use
+        bool fColdStake = false;
+        if (prevPubKey.IsPayToColdStaking()) {
+            // if we have both keys, sign with the spender key
+            fColdStake = !bool(IsMine(keystore, prevPubKey) & ISMINE_SPENDABLE_DELEGATED);
+        }
+
         // Only sign SIGHASH_SINGLE if there's a corresponding output:
         if (!fHashSingle || (i < mergedTx.vout.size()))
-            SignSignature(keystore, prevPubKey, mergedTx, i, nHashType);
+            SignSignature(keystore, prevPubKey, mergedTx, i, nHashType, fColdStake);
 
         // ... and merge in other signatures:
         BOOST_FOREACH (const CMutableTransaction& txv, txVariants) {
@@ -935,8 +943,8 @@ UniValue createrawzerocoinstake(const UniValue& params, bool fHelp)
     assert(pwalletMain != NULL);
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
-    if(GetAdjustedTime() > GetSporkValue(SPORK_16_ZEROCOIN_MAINTENANCE_MODE))
-        throw JSONRPCError(RPC_WALLET_ERROR, "zkubo is currently disabled due to maintenance.");
+    if(sporkManager.IsSporkActive(SPORK_16_ZEROCOIN_MAINTENANCE_MODE))
+        throw JSONRPCError(RPC_WALLET_ERROR, "zKUBO is currently disabled due to maintenance.");
 
     std::string serial_hash = params[0].get_str();
     if (!IsHex(serial_hash))

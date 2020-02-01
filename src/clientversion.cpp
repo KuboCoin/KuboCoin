@@ -1,8 +1,6 @@
-// Copyright (c) 2014-2016 The Dash developers
-// Copyright (c) 2015-2019 The PIVX developers
-// Copyright (c) 2018-2019 The DogeCash developers
-// Copyright (c) 2018-2019 The KuboCoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2012-2017 The Bitcoin Core developers
+// Copyright (c) 2016-2017 The PIVX developers
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "clientversion.h"
@@ -16,7 +14,7 @@
  * for both kubocoind and kubocoin-qt, to make it harder for attackers to
  * target servers or GUI users specifically.
  */
-const std::string CLIENT_NAME("KuboCoin Core");
+const std::string CLIENT_NAME("kuboCoin Core");
 
 /**
  * Client version number
@@ -58,7 +56,7 @@ const std::string CLIENT_NAME("KuboCoin Core");
     "v" DO_STRINGIZE(maj) "." DO_STRINGIZE(min) "." DO_STRINGIZE(rev) "." DO_STRINGIZE(build) "-g" commit
 
 #define BUILD_DESC_FROM_UNKNOWN(maj, min, rev, build) \
-    "v" DO_STRINGIZE(maj) "." DO_STRINGIZE(min) "." DO_STRINGIZE(rev) "." DO_STRINGIZE(build) "-unk"
+    "v" DO_STRINGIZE(maj) "." DO_STRINGIZE(min) "." DO_STRINGIZE(rev) "." DO_STRINGIZE(build) "-kubo"
 
 #ifndef BUILD_DESC
 #ifdef BUILD_SUFFIX
@@ -114,7 +112,7 @@ std::string FormatSubVersion(const std::string& name, int nClientVersion, const 
 }
 
 /**
- * Split the Sub Version string such as /KuboCoin Core:x.y.z/
+ * Split the Sub Version string such as /kuboCoin Core:x.y.z/
 * in order to get integer version number
 */
 

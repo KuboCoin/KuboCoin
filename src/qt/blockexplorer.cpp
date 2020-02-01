@@ -12,7 +12,7 @@
 #include "net.h"
 #include "txdb.h"
 #include "ui_blockexplorer.h"
-#include "ui_interface.h"
+#include "guiinterface.h"
 #include "util.h"
 #include "utilstrencodings.h"
 #include <QDateTime>
@@ -478,7 +478,7 @@ void BlockExplorer::showEvent(QShowEvent*)
 
         if (!GetBoolArg("-txindex", true)) {
             QString Warning = tr("Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (kubocoin.conf).");
-            QMessageBox::warning(this, "KuboCoin Core Blockchain Explorer", Warning, QMessageBox::Ok);
+            QMessageBox::warning(this, "kuboCoin Core Blockchain Explorer", Warning, QMessageBox::Ok);
         }
     }
 }

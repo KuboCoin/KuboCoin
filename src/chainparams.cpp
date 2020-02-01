@@ -1,11 +1,14 @@
-// Copyright (c) 2014-2016 The Dash developers
-// Copyright (c) 2015-2019 The PIVX developers
-// Copyright (c) 2018-2019 The DogeCash developers
-// Copyright (c) 2018-2019 The KuboCoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2010 Satoshi Nakamoto
+// Copyright (c) 2009-2014 The Bitcoin developers
+// Copyright (c) 2014-2015 The Dash developers
+// Copyright (c) 2015-2018 The PIVX developers
+// Copyright (c) 2018-2019 The kuboCoin developers
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
 #include "libzerocoin/Params.h"
 #include "chainparams.h"
+#include "consensus/merkle.h"
 #include "random.h"
 #include "util.h"
 #include "utilstrencodings.h"
@@ -14,6 +17,7 @@
 #include "libzerocoin/bignum.h"
 #include <assert.h>
 
+#include <limits>
 #include <boost/assign/list_of.hpp>
 
 using namespace std;
@@ -52,13 +56,11 @@ static void convertSeed6(std::vector<CAddress>& vSeedsOut, const SeedSpec6* data
 //   (no blocks before with a timestamp after, none after with
 //    timestamp before)
 // + Contains no strange transactions
-static Checkpoints::MapCheckpoints mapCheckpoints = 
+static Checkpoints::MapCheckpoints mapCheckpoints =
 	boost::assign::map_list_of
         (0, uint256("0x000008d67dbdf5f9bb9fba21d36e90d31a0fac2235420faf57b949fe97937dee"))
-        (5000, uint256("0xc9747810067fe5db3d557a827b692b5414f850c18e26c2037bdc112d6d6e5d39"))
-        (7500, uint256("0xbca6bb9a2913e5a62b73c5442327477f2ce9708d552ea21eb977fefa95612fab"))
-        (10000, uint256("0x8617b5bf88166dbd7949ad3e603f50b5c04e61981095d61b42666e1f37cfd470"));
-
+	(1, uint256("0x00000721e7f811ace4bd255239f42facfc324f63b377b8b92ea920d3574259a2"))
+	(5000, uint256("0xc9747810067fe5db3d557a827b692b5414f850c18e26c2037bdc112d6d6e5d39"));
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
     1568666856, // * UNIX timestamp of last checkpoint block
@@ -68,7 +70,7 @@ static const Checkpoints::CCheckpointData data = {
 
 static Checkpoints::MapCheckpoints mapCheckpointsTestnet =
     boost::assign::map_list_of
-    (0, uint256("0x000008d67dbdf5f9bb9fba21d36e90d31a0fac2235420faf57b949fe97937dee"));
+    (0, uint256("0x001"));
 static const Checkpoints::CCheckpointData dataTestnet = {
     &mapCheckpointsTestnet,
     1568666856,
@@ -76,7 +78,7 @@ static const Checkpoints::CCheckpointData dataTestnet = {
     250};
 
 static Checkpoints::MapCheckpoints mapCheckpointsRegtest =
-    boost::assign::map_list_of(0, uint256("0x000008d67dbdf5f9bb9fba21d36e90d31a0fac2235420faf57b949fe97937dee"));
+    boost::assign::map_list_of(0, uint256("0x001"));
 static const Checkpoints::CCheckpointData dataRegtest = {
     &mapCheckpointsRegtest,
     1568666856,
@@ -99,6 +101,19 @@ libzerocoin::ZerocoinParams* CChainParams::Zerocoin_Params(bool useModulusV1) co
         return &ZCParamsHex;
 
     return &ZCParamsDec;
+}
+
+bool CChainParams::HasStakeMinAgeOrDepth(const int contextHeight, const uint32_t contextTime, const int utxoFromBlockHeight, const uint32_t utxoFromBlockTime) const
+{
+    if (NetworkID() == CBaseChainParams::REGTEST)
+        return true;
+
+    // before stake modifier V2, the age required was 60 * 60 (1 hour) / not required on regtest
+    if (!IsStakeModifierV2(contextHeight))
+        return (utxoFromBlockTime + 3600 <= contextTime);
+
+    // after stake modifier V2, we require the utxo to be nStakeMinDepth deep in the chain
+    return(contextHeight - utxoFromBlockHeight >= nStakeMinDepth);
 }
 
 class CMainParams : public CChainParams
@@ -126,12 +141,16 @@ public:
         nRejectBlockOutdatedMajority = 10260; // 95%
         nToCheckBlockUpgradeMajority = 10800; // Approximate expected amount of blocks in 7 days (1440*7.5)
         nMinerThreads = 0;
-        nTargetTimespan = 1 * 60; // kubocoin: 1 day  
-        nTargetSpacing = 1 * 90; //kubocoin: 1 Min
+        nTargetSpacing = 1 * 90; //kubocoin: 90sec
+        nStakeMinDepth = 600;
+        nFutureTimeDriftPoW = 172000;
+        nFutureTimeDriftPoS = 154180;
         nMaturity = 5;
         nMasternodeCountDrift = 15;
-        nMasternodeCollateralLimit = 20000000; //MN collateral 20,000,000
-        nMaxMoneyOut = 50000000000 * COIN; //100 Billion
+        nMasternodeCollateralLimit = 20000000; //MN collateral
+        nStakeCollateralMin = 1000000 * COIN;
+        nMaxMoneyOut = 50000000000 * COIN; //100 Bill
+        nMinColdStakingAmount = 1000000 * COIN;
         /** Height or Time Based Activations **/
         nLastPOWBlock = 350;
         nModifierUpdateBlock = INT_MAX;
@@ -145,12 +164,19 @@ public:
         //nInvalidAmountFiltered = 268200*COIN; //Amount of invalid coins filtered through exchanges, that should be considered valid
         nBlockZerocoinV2 = INT_MAX; //!> The block that zerocoin v2 becomes active - roughly Tuesday, May 8, 2018 4:00:00 AM GMT
         nBlockDoubleAccumulated = 1050010;
-        nEnforceNewSporkKey = 1425158000; //!> Sporks signed after (GMT): Tuesday, May 1, 2018 7:00:00 AM GMT must use the new spork key
+        nEnforceNewSporkKey = 1568666856; //!> Sporks signed after (GMT): Tuesday, May 1, 2018 7:00:00 AM GMT must use the new spork key
         nRejectOldSporkKey = 1527811200; //!> Fully reject old spork key after (GMT): Friday, June 1, 2018 12:00:00 AM
+        nBlockStakeModifierlV2 = 243239; //!> Enforce new Stake Protocols add test/regtest
+
+        // New P2P messages signatures
+        nBlockEnforceNewMessageSignatures = 243249;
 
         // Fake Serial Attack
-        nFakeSerialBlockheightEnd = 1686229;
+        nFakeSerialBlockheightEnd = 100000;
       //  nSupplyBeforeFakeSerial = 4131563 * COIN;   // zerocoin supply at block nFakeSerialBlockheightEnd
+
+        // Cold Staking enforcement
+        nColdStakingStart = 243249;
 
         const char* pszTimestamp = "Bitcoin goes price rockets up days after Binance hack";
         CMutableTransaction txNew;
@@ -161,7 +187,7 @@ public:
         txNew.vout[0].scriptPubKey = CScript() << ParseHex("04e0d7b7044db3af06e9d31f64c1c6a68171938faf309b627f7035d7360bd36f33d331a26939681a0559599a5f5b3436c7b3f4dd2da9b63ac0e216b891d537a3ca") << OP_CHECKSIG;
         genesis.vtx.push_back(txNew);
         genesis.hashPrevBlock = 0;
-        genesis.hashMerkleRoot = genesis.BuildMerkleTree();
+        genesis.hashMerkleRoot = BlockMerkleRoot(genesis);
         genesis.nVersion = 1;
         genesis.nTime = 1568666856;
         genesis.nBits = 0x1e0ffff0;
@@ -184,9 +210,9 @@ public:
 	base58Prefixes[SECRET_KEY] = std::vector<unsigned char>(1, 46);
 	base58Prefixes[EXT_PUBLIC_KEY] = list_of(0x02)(0x2D)(0x25)(0x33).convert_to_container<std::vector<unsigned char> >();
 	base58Prefixes[EXT_SECRET_KEY] = list_of(0x02)(0x21)(0x31)(0x2B).convert_to_container<std::vector<unsigned char> >();
-        // KuboCoin BIP44 coin type is '438' (0x800001b6)
+        // KuboCoin BIP44 coin type is '438'
         // 	BIP44 coin type is from https://github.com/satoshilabs/slips/blob/master/slip-0044.md
-        base58Prefixes[EXT_COIN_TYPE] = boost::assign::list_of(0x80)(0x00)(0x01)(0xb6).convert_to_container<std::vector<unsigned char> >();
+        nExtCoinType = 438;
 
         convertSeed6(vFixedSeeds, pnSeed6_main, ARRAYLEN(pnSeed6_main));
 
@@ -201,7 +227,7 @@ public:
 
         nPoolMaxTransactions = 3;
         nBudgetCycleBlocks = 43200; //!< Amount of blocks in a months period of time (using 1 minutes per) = (60*24*30)
-        strSporkKey = "04d58cd3576439b8bcbfe266214ab708a983aa3fa87a7afa12104f2c7022b12f682e1c44a0a99fc771a4ff925f92cdadbe1c7ccd094d7e229ef2dc5744083102f9";
+        strSporkPubKey = "04d58cd3576439b8bcbfe266214ab708a983aa3fa87a7afa12104f2c7022b12f682e1c44a0a99fc771a4ff925f92cdadbe1c7ccd094d7e229ef2dc5744083102f9";
         strObfuscationPoolDummyAddress = "KDv8dUifgBKkWM1nwjad7yNasQ41yA9ntR";
         nStartMasternodePayments = 1403728576; //Wed, 25 Jun 2014 20:36:16 GMT
 
@@ -251,11 +277,12 @@ public:
         nRejectBlockOutdatedMajority = 5472; // 95%
         nToCheckBlockUpgradeMajority = 5760; // 4 days
         nMinerThreads = 0;
-        nTargetTimespan = 1 * 60; // kubocoin: 1 day
         nTargetSpacing = 1 * 60;  // kubocoin: 1 minute
-        nLastPOWBlock = 2000;
-        nMaturity = 32;
+        nLastPOWBlock = 125;
+        nMaturity = 1;
+        nStakeMinDepth = 50;
         nMasternodeCountDrift = 4;
+        nStakeCollateralMin = 10;
         nModifierUpdateBlock = 51197; //approx Mon, 17 Apr 2017 04:00:00 GMT
         nMaxMoneyOut = 21000000 * COIN;
         nZerocoinStartHeight = INT_MAX;
@@ -269,11 +296,18 @@ public:
         nBlockZerocoinV2 = 444020; //!> The block that zerocoin v2 becomes active
         nEnforceNewSporkKey = 1521604800; //!> Sporks signed after Wednesday, March 21, 2018 4:00:00 AM GMT must use the new spork key
         nRejectOldSporkKey = 1522454400; //!> Reject old spork key after Saturday, March 31, 2018 12:00:00 AM GMT
+        nBlockStakeModifierlV2 = 1500; //!> Enforce new Stake Protocols add test/regtest
+
+        // New P2P messages signatures
+        nBlockEnforceNewMessageSignatures = 2214000;
 
         // Fake Serial Attack
         nFakeSerialBlockheightEnd = -1;
         nSupplyBeforeFakeSerial = 0;
-	//MineGenesis(genesis);
+
+        // Cold Staking enforcement
+        nColdStakingStart = 2106100;
+
         //! Modify the testnet genesis block so the timestamp is valid for a later start.
         genesis.nTime = 1558130910; 
         genesis.nBits = 0x1e0ffff0;
@@ -294,8 +328,7 @@ public:
 	base58Prefixes[EXT_PUBLIC_KEY] = list_of(0x02)(0x2D)(0x25)(0x33).convert_to_container<std::vector<unsigned char> >();
 	base58Prefixes[EXT_SECRET_KEY] = list_of(0x02)(0x21)(0x31)(0x2B).convert_to_container<std::vector<unsigned char> >();
         // 	BIP44 coin type is from https://github.com/satoshilabs/slips/blob/master/slip-0044.md
-        base58Prefixes[EXT_COIN_TYPE] = boost::assign::list_of(0x80)(0x00)(0x00)(0xbc).convert_to_container<std::vector<unsigned char> >();
-
+        nExtCoinType = 1;
 	convertSeed6(vFixedSeeds, pnSeed6_test, ARRAYLEN(pnSeed6_test));
 
         fMiningRequiresPeers = false;
@@ -307,7 +340,7 @@ public:
 
         nPoolMaxTransactions = 2;
         nBudgetCycleBlocks = 144; //!< Ten cycles per day on testnet
-	strSporkKey = "04fc640bba80713c0666acda4d3ffce670307a55f90b703995c830a1e9110b07244508724b7106395f8336c78d3691ae5ba05abe3840f3a7e18d6b95acdd0de71d";
+	strSporkPubKey = "04fc640bba80713c0666acda4d3ffce670307a55f90b703995c830a1e9110b07244508724b7106395f8336c78d3691ae5ba05abe3840f3a7e18d6b95acdd0de71d";
         strObfuscationPoolDummyAddress = "xp87cG8UEQgzs1Bk67Yk884C7pnQfAeo7q";
         nStartMasternodePayments = 1520837558; //Fri, 09 Jan 2015 21:05:58 GMT
         nBudget_Fee_Confirmations = 3; // Number of confirmations for the finalization fee. We have to make this very short
@@ -342,12 +375,12 @@ public:
         nRejectBlockOutdatedMajority = 950;
         nToCheckBlockUpgradeMajority = 1000;
         nMinerThreads = 1;
-        nTargetTimespan = 24 * 60 * 60; // kubocoin: 1 day
         nTargetSpacing = 1 * 60;        // kubocoin: 1 minutes
         bnProofOfWorkLimit = ~uint256(0) >> 1;
         nLastPOWBlock = 250;
         nMaturity = 100;
         nMasternodeCountDrift = 4;
+        nStakeCollateralMin = 0;
         nModifierUpdateBlock = 0; //approx Mon, 17 Apr 2017 04:00:00 GMT
         nMaxMoneyOut = 21000000 * COIN;
         nZerocoinStartHeight = INT_MAX;
@@ -358,9 +391,15 @@ public:
         nBlockFirstFraudulent = 999999999; //First block that bad serials emerged
         nBlockLastGoodCheckpoint = 999999999; //Last valid accumulator checkpoint
 
+        // New P2P messages signatures
+        nBlockEnforceNewMessageSignatures = 1;
+
         // Fake Serial Attack
         nFakeSerialBlockheightEnd = -1;
-	//MineGenesis(genesis);
+
+        // Cold Staking enforcement
+        nColdStakingStart = 251;
+
         //! Modify the regtest genesis block so the timestamp is valid for a later start.
         genesis.nTime = 1558130910; 
         genesis.nBits = 0x1e0ffff0;
@@ -373,7 +412,6 @@ public:
 
         vFixedSeeds.clear(); //! Testnet mode doesn't have any fixed seeds.
         vSeeds.clear();      //! Testnet mode doesn't have any DNS seeds.
-
         fMiningRequiresPeers = false;
         fAllowMinDifficultyBlocks = true;
         fDefaultConsistencyChecks = true;

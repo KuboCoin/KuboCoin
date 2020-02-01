@@ -22,7 +22,6 @@ light-gray     #d7d7d7  Balances/Input Fields
 green          #00a300  OnButtonPress 
 dark-grey      #d6d6d6  top toolbar
                       */
-
 /****************************************************************************************/
 /*                                                                                      */
 /* Note: it's sometimes not easy to figure out all those screen elements, so unused     */
@@ -32,11 +31,11 @@ dark-grey      #d6d6d6  top toolbar
 /****************************************************************************************/
 
 WalletFrame {
-	background-image: url(':/images/walletFrame') no-repeat fixed;
-	background-position: left bottom;
-	border-top: 0px solid #000;
-	margin: 0;
-	padding: 0;
+    background-image: url(':/images/walletFrame') no-repeat fixed;
+    background-position: left bottom;
+    border-top: 0px solid #000;
+    margin: 0;
+    padding: 0;
 }
 
 QStatusBar {
@@ -70,8 +69,8 @@ QMenu::item {
 }
 
 QMenu::item:selected {
-    background-color: #424E5B;
-    color: #D6D6D6;
+    background-color: #e15df8;
+    color: #d6d6d6;
 }
 
 QToolBar {
@@ -85,7 +84,7 @@ QToolBar {
 QToolBar>QToolButton {
     Alignment: left;
     background-color: #e15df8;
-    selection-background-color:transparent;
+    selection-background-color: transparent;
     border: 0.5px solid #d6d6d6;
     border-left: 0px;
     border-right: 0px;
@@ -100,7 +99,7 @@ QToolBar>QToolButton {
 
 QToolBar>QToolButton:checked {
     background-color: qlineargradient(x1: 0, x2: 1, stop: 0 #0c377e, stop: 0.07 #0c377e, stop: 0.0701 #e15df8, stop: 1 #e15df8);
-    color: #d6d6d6;
+    color: #0c377e;
 }
 
 
@@ -112,13 +111,13 @@ QToolBar>QToolButton:hover {
 }
 
 QToolBar>QToolButton#ToolbarSpacer:hover:!selected {
-    background-color: #424E5B;
+    background-color: #e15df8;
     /* Do not highlight placeholder on hover */
 }
 
 QToolBar>QToolButton:pressed {
     background-color: qlineargradient(x1: 0, x2: 1, stop: 0 #0c377e, stop: 0.07 #0c377e, stop: 0.0701 #e15df8, stop: 1 #e15df8);
-    color: #d6d6d6;
+    color: #0c377e;
 }
 
 QMessageBox {
@@ -129,7 +128,7 @@ QProgressBar {
     color: #d6d6d6;
     border: 0px solid grey;
     border-radius: 5px;
-    background-color:transparent;
+    background-color: transparent;
     padding-left: 0px;
     padding-right: 0px;
 }
@@ -140,7 +139,7 @@ QProgressBar::chunk {
 }
 
 QLabel#progressBarLabel {
-    background-color:transparent;
+    background-color: transparent;
     color: #e15df8;
     padding-left: 5px;
     padding-right: 5px;
@@ -162,7 +161,6 @@ QTabBar {
 
 QTabBar::tab:hover:!selected {
     background-color: #0c377e;
-    color: #0c377e;
 }
 
 QWidget {
@@ -179,9 +177,8 @@ QGroupBox {
 }
 
 QToolTip {
-    border: 0px;
-    background-color: #D6D6D6;
-    color: #0c377e;
+    background-color: #0c377e;
+    color: #d6d6d6;
 }
 
 
@@ -190,7 +187,7 @@ QToolTip {
 QLabel {
     /* Base Text Size & Color */
     font-size: 12px;
-    color: #d6d6d6;
+    color: #d7d7d7;
 }
 
 .QRadioButton {
@@ -200,7 +197,7 @@ QLabel {
 
 .QCheckBox {
     /* Checkbox Labels */
-    color: #d6d6d6;
+    color: #ffffff;
 }
 
 .QCheckBox:hover {}
@@ -317,7 +314,7 @@ QComboBox {
     padding: 3px 5px 3px 5px;
     background: #0c377e;
     min-height: 25px;
-    color: #424E5B;
+    color: #d6d6d6;
 }
 
 QComboBox:checked {
@@ -325,8 +322,8 @@ QComboBox:checked {
 }
 
 QComboBox:editable {
-    background: #424E5B;
-    color: #e15df8;
+    background: #e15df8;
+    color: #d6d6d6;
     border: 0px solid transparent;
 }
 
@@ -362,14 +359,14 @@ QComboBox::item:alternate {
 
 QComboBox::item:selected {
     border: 0px solid transparent;
-    background: #424E5B;
+    background: #f2f2f2;
 }
 
 QComboBox::indicator {
-    background-color:transparent;
-    selection-background-color:transparent;
-    color:transparent;
-    selection-color:transparent;
+    background-color: transparent;
+    selection-background-color: transparent;
+    color: transparent;
+    selection-color: transparent;
 }
 
 QAbstractSpinBox {
@@ -386,14 +383,14 @@ QAbstractSpinBox {
 
 QAbstractSpinBox:!focus {
     color: #e15df8;
-    background-color: #424E5B;
+    background-color: #e7e7e7;
 }
 
 QAbstractSpinBox::up-button {
     subcontrol-origin: border;
     subcontrol-position: top right;
     width: 21px;
-    background: #0c377e;
+    background: #e7e7e7;
     /* Remove this to get 3D rendered buttons */
     padding-right: 1px;
     padding-left: 5px;
@@ -401,14 +398,14 @@ QAbstractSpinBox::up-button {
 }
 
 QAbstractSpinBox::up-arrow {
-    image:url(':/images/upArrow_small');
+    image: url(':/images/upArrow_small');
 }
 
 QAbstractSpinBox::down-button {
     subcontrol-origin: border;
     subcontrol-position: bottom right;
     width: 21px;
-    background: #0c377e;
+    background: #e7e7e7;
     /* Remove this to get 3D rendered buttons */
     padding-right: 1px;
     padding-left: 5px;
@@ -433,7 +430,7 @@ QValueComboBox {
 
 QValueComboBox:!focus {
     color: #e15df8;
-    background-color: #424E5B;
+    background-color: #0c377e;
 }
 
 
@@ -447,7 +444,7 @@ QHeaderView {
 
 QHeaderView::section {
     /* Table Header Sections */
-    qproperty-alignment:center;
+    qproperty-alignment: center;
     background-color: #e15df8;
     color: #0c377e;
     min-height: 25px;
@@ -474,13 +471,13 @@ QHeaderView::section:last {
 }
 
 .QScrollArea {
-    background:transparent;
+    background: transparent;
     border: 0;
 }
 
 .QTableView {
     /* Table - has to be selected as a class otherwise it throws off QCalendarWidget */
-    background:transparent;
+    background: transparent;
     border: 1px solid #d6d6d6;
 }
 
@@ -644,8 +641,8 @@ QSlider::groove:horizontal {
 }
 
 QSlider::sub-page:horizontal {
-    /* background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #e15df8, stop: 1 #7b67a9); */
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #e09155, stop: 1 #f2cc93);
+/*    background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #e15df8, stop: 1 #7b67a9); */
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #e15df8, stop: 1 #7b67a9);
     border: 1px solid #d6d6d6;
     height: 10px;
     border-radius: 4px;
@@ -755,16 +752,16 @@ QDialog#OpenURIDialog QLabel#label {
 
 QDialog#OpenURIDialog QPushButton#selectFileButton {
     /* ... Button */
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: .01 #0c377e, stop: .1 rgba(250, 250, 250, 128), stop: .95 rgba(250, 250, 250, 255), stop: 1 #0c377e);
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: .01 #f6f6f6, stop: .1 rgba(250, 250, 250, 128), stop: .95 rgba(250, 250, 250, 255), stop: 1 #ebebeb);
     border: 1px solid #d2d2d2;
-    color: #e15df8;
+    color: #d6d6d6;
     padding-left: 10px;
     padding-right: 10px;
 }
 
 QDialog#OpenURIDialog QPushButton#selectFileButton:hover {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: .01 #0c377e, stop: .1 rgba(240, 240, 240, 255), stop: .95 rgba(240, 240, 240, 255), stop: 1 #0c377e);
-    color: #e15df8;
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: .01 #f6f6f6, stop: .1 rgba(240, 240, 240, 255), stop: .95 rgba(240, 240, 240, 255), stop: 1 #ebebeb);
+    color: #d6d6d6;
 }
 
 QDialog#OpenURIDialog QPushButton#selectFileButton:pressed {
@@ -856,7 +853,7 @@ QWidget#PrivacyDialog QLabel#zkuboLabel {
     background-color: #e15df8;
 }
 
-QWidget#PrivacyDialog QLabel#oKUBOLabel {
+QWidget#PrivacyDialog QLabel#okuboLabel {
     font-size: 14px;
     color: #0c377e;
     background-color: #e15df8;
@@ -1019,17 +1016,17 @@ QDialog#HelpMessageDialog QScrollBar:horizontal {
 }
 
 
-/* About kubocoin Dialog */
+/* About kubo Dialog */
 
 QDialog#AboutDialog QLabel#label,
 QDialog#AboutDialog QLabel#copyrightLabel,
 QDialog#AboutDialog QLabel#label_2 {
-    /* About kubocoin Contents */
+    /* About kubo Contents */
     margin-left: 10px;
 }
 
 QDialog#AboutDialog QLabel#label_2 {
-    /* Margin for About kubocoin text */
+    /* Margin for About kubo text */
     margin-right: 10px;
 }
 
@@ -1070,7 +1067,7 @@ QLabel#labelOverviewHeaderRight {
 }
 
 QWidget .QFrame#frame_Header {
-    /* Header with Page-Title and kubocoin-image */
+    /* Header with Page-Title and kubo-image */
     min-width: 400px;
     background-color: transparent;
 }
@@ -1100,7 +1097,7 @@ QWidget .QFrame#frame_Balances {
     /* Upper left side */
     min-width: 400px;
     background-color: transparent;
-    /*background-color: #0c377e; */
+}
 
 QWidget .QFrame#frame_ZerocoinBalances {
     /* Lower left side */
@@ -1127,7 +1124,7 @@ QWidget .QFrame#frame_Balances>.QLabel {
 }
 
 QWidget .QFrame#frame_Balances .QLabel#label_5 {
-    /* KUBO Balances Label */
+    /* kubo Balances Label */
     qproperty-alignment: 'AlignVCenter | AlignLeft';
     min-width: 160px;
     background-color: transparent;
@@ -1404,7 +1401,7 @@ QWidget .QFrame#frame_CombinedBalances .QLabel#label_5z {
 }
 
 QWidget .QFrame#frame_CombinedBalances .QLabel#labelBalanceTextz {
-    /* Available KUBO Label */
+    /* Available kubo Label */
     qproperty-alignment: 'AlignVCenter | AlignLeft';
     min-width: 160px;
     color: #e15df8;
@@ -1415,7 +1412,7 @@ QWidget .QFrame#frame_CombinedBalances .QLabel#labelBalanceTextz {
 }
 
 QWidget .QFrame#frame_CombinedBalances .QLabel#labelBalancez {
-    /* Available KUBO Balance */
+    /* Available kubo Balance */
     qproperty-alignment: 'AlignVCenter | AlignLeft';
     font-size: 26px;
     font-weight: normal;
@@ -1996,18 +1993,18 @@ QCalendarWidget QWidget#qt_calendar_navigationbar {
 
 QCalendarWidget QAbstractItemView {
     /* Calendar widget days */
-    alternate-background-color: #424E5B;
+    alternate-background-color: #dedbe5;
     background-color: #0c377e;
 }
 
 QCalendarWidget QAbstractItemView:enabled {
     /* Calendar widget weekdays in month */
-    color: #e15df8;
+    color: #0c377e;
 }
 
 QCalendarWidget QAbstractItemView:disabled {
     /* Calendar widget days not in month */
-    color: #e15df8;
+    color: #0c377e;
 }
 
 QWidget#GovernancePage .QFrame#frame_Content {

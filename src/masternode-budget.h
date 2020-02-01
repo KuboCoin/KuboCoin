@@ -1,7 +1,5 @@
-// Copyright (c) 2014-2016 The Dash developers
-// Copyright (c) 2015-2019 The PIVX developers
-// Copyright (c) 2018-2019 The DogeCash developers
-// Copyright (c) 2018-2019 The KuboCoin developers
+// Copyright (c) 2014-2015 The Dash developers
+// Copyright (c) 2015-2018 The kubocoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -58,7 +56,7 @@ bool IsBudgetCollateralValid(uint256 nTxCollateralHash, uint256 nExpectedHash, s
 // CBudgetVote - Allow a masternode node to vote and broadcast throughout the network
 //
 
-class CBudgetVote
+class CBudgetVote : public CSignedMessage
 {
 public:
     bool fValid;  //if the vote is currently valid / counted
@@ -67,13 +65,10 @@ public:
     uint256 nProposalHash;
     int nVote;
     int64_t nTime;
-    std::vector<unsigned char> vchSig;
 
     CBudgetVote();
     CBudgetVote(CTxIn vin, uint256 nProposalHash, int nVoteIn);
 
-    bool Sign(CKey& keyMasternode, CPubKey& pubKeyMasternode);
-    bool SignatureValid(bool fSignatureCheck);
     void Relay();
 
     std::string GetVoteString()
@@ -84,15 +79,12 @@ public:
         return ret;
     }
 
-    uint256 GetHash()
-    {
-        CHashWriter ss(SER_GETHASH, PROTOCOL_VERSION);
-        ss << vin;
-        ss << nProposalHash;
-        ss << nVote;
-        ss << nTime;
-        return ss.GetHash();
-    }
+    uint256 GetHash() const;
+
+    // override CSignedMessage functions
+    uint256 GetSignatureHash() const override { return GetHash(); }
+    std::string GetStrMessage() const override;
+    const CTxIn GetVin() const override { return vin; };
 
     ADD_SERIALIZE_METHODS;
 
@@ -104,6 +96,12 @@ public:
         READWRITE(nVote);
         READWRITE(nTime);
         READWRITE(vchSig);
+        try
+        {
+            READWRITE(nMessVersion);
+        } catch (...) {
+            nMessVersion = MessageVersion::MESS_VER_STRMESS;
+        }
     }
 };
 
@@ -111,7 +109,7 @@ public:
 // CFinalizedBudgetVote - Allow a masternode node to vote and broadcast throughout the network
 //
 
-class CFinalizedBudgetVote
+class CFinalizedBudgetVote : public CSignedMessage
 {
 public:
     bool fValid;  //if the vote is currently valid / counted
@@ -119,23 +117,17 @@ public:
     CTxIn vin;
     uint256 nBudgetHash;
     int64_t nTime;
-    std::vector<unsigned char> vchSig;
 
     CFinalizedBudgetVote();
     CFinalizedBudgetVote(CTxIn vinIn, uint256 nBudgetHashIn);
 
-    bool Sign(CKey& keyMasternode, CPubKey& pubKeyMasternode);
-    bool SignatureValid(bool fSignatureCheck);
     void Relay();
+    uint256 GetHash() const;
 
-    uint256 GetHash()
-    {
-        CHashWriter ss(SER_GETHASH, PROTOCOL_VERSION);
-        ss << vin;
-        ss << nBudgetHash;
-        ss << nTime;
-        return ss.GetHash();
-    }
+    // override CSignedMessage functions
+    uint256 GetSignatureHash() const override { return GetHash(); }
+    std::string GetStrMessage() const override;
+    const CTxIn GetVin() const override { return vin; };
 
     ADD_SERIALIZE_METHODS;
 
@@ -146,6 +138,12 @@ public:
         READWRITE(nBudgetHash);
         READWRITE(nTime);
         READWRITE(vchSig);
+        try
+        {
+            READWRITE(nMessVersion);
+        } catch (...) {
+            nMessVersion = MessageVersion::MESS_VER_STRMESS;
+        }
     }
 };
 
@@ -407,9 +405,6 @@ public:
 // FinalizedBudget are cast then sent to peers with this object, which leaves the votes out
 class CFinalizedBudgetBroadcast : public CFinalizedBudget
 {
-private:
-    std::vector<unsigned char> vchSig;
-
 public:
     CFinalizedBudgetBroadcast();
     CFinalizedBudgetBroadcast(const CFinalizedBudget& other);

@@ -1,14 +1,12 @@
-// Copyright (c) 2014-2016 The Dash developers
-// Copyright (c) 2015-2019 The PIVX developers
-// Copyright (c) 2018-2019 The DogeCash developers
-// Copyright (c) 2018-2019 The KuboCoin developers
+// Copyright (c) 2014-2015 The Dash developers
+// Copyright (c) 2015-2017 The PIVX developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "netbase.h"
 #include "masternodeconfig.h"
 #include "util.h"
-#include "ui_interface.h"
+#include "guiinterface.h"
 #include <base58.h>
 
 CMasternodeConfig masternodeConfig;
@@ -94,11 +92,11 @@ bool CMasternodeConfig::read(std::string& strErr)
     return true;
 }
 
-bool CMasternodeConfig::CMasternodeEntry::castOutputIndex(int &n)
+bool CMasternodeConfig::CMasternodeEntry::castOutputIndex(int &n) const
 {
     try {
         n = std::stoi(outputIndex);
-    } catch (const std::exception e) {
+    } catch (const std::exception& e) {
         LogPrintf("%s: %s on getOutputIndex\n", __func__, e.what());
         return false;
     }

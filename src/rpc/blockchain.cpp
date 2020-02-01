@@ -1,13 +1,14 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2018 The kubocoin developers
+// Copyright (c) 2015-2018 The kuboCoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "base58.h"
 #include "checkpoints.h"
 #include "clientversion.h"
+#include "kernel.h"
 #include "main.h"
 #include "rpc/server.h"
 #include "sync.h"
@@ -134,7 +135,7 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
         result.push_back(Pair("nextblockhash", pnext->GetBlockHash().GetHex()));
 
     result.push_back(Pair("modifier", strprintf("%016x", blockindex->nStakeModifier)));
-
+    result.push_back(Pair("modifierV2", blockindex->nStakeModifierV2.GetHex()));
     result.push_back(Pair("moneysupply",ValueFromAmount(blockindex->nMoneySupply)));
 
     UniValue zkuboObj(UniValue::VOBJ);
@@ -143,6 +144,30 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
     }
     zkuboObj.push_back(Pair("total", ValueFromAmount(blockindex->GetZerocoinSupply())));
     result.push_back(Pair("zkubosupply", zkuboObj));
+
+    //////////
+    ////////// Coin stake data ////////////////
+    /////////
+    if (block.IsProofOfStake()) {
+        // First grab it
+        uint256 hashProofOfStakeRet;
+        std::unique_ptr <CStakeInput> stake;
+        // Initialize the stake object (we should look for this in some other place and not initialize it every time..)
+        if (!initStakeInput(block, stake, blockindex->nHeight - 1))
+            throw JSONRPCError(RPC_INTERNAL_ERROR, "Cannot initialize stake input");
+
+        unsigned int nTxTime = block.nTime;
+        // todo: Add the debug as param..
+        if (!GetHashProofOfStake(blockindex->pprev, stake.get(), nTxTime, false, hashProofOfStakeRet))
+            throw JSONRPCError(RPC_INTERNAL_ERROR, "Cannot get proof of stake hash");
+
+        UniValue stakeData(UniValue::VOBJ);
+        stakeData.push_back(Pair("BlockFromHash", stake.get()->GetIndexFrom()->GetBlockHash().GetHex()));
+        stakeData.push_back(Pair("BlockFromHeight", stake.get()->GetIndexFrom()->nHeight));
+        stakeData.push_back(Pair("hashProofOfStake", hashProofOfStakeRet.GetHex()));
+        stakeData.push_back(Pair("stakeModifierHeight", ((stake->getStakeModifierHeight()))));
+        result.push_back(Pair("CoinStake", stakeData));
+    }
 
     return result;
 }
@@ -490,7 +515,7 @@ UniValue getrawmempool(const UniValue& params, bool fHelp)
             "{                           (json object)\n"
             "  \"transactionid\" : {       (json object)\n"
             "    \"size\" : n,             (numeric) transaction size in bytes\n"
-            "    \"fee\" : n,              (numeric) transaction fee in kubocoin\n"
+            "    \"fee\" : n,              (numeric) transaction fee in kuboCoin\n"
             "    \"time\" : n,             (numeric) local time transaction entered pool in seconds since 1 Jan 1970 GMT\n"
             "    \"height\" : n,           (numeric) block height when transaction entered pool\n"
             "    \"startingpriority\" : n, (numeric) priority when transaction entered pool\n"
@@ -734,8 +759,8 @@ UniValue gettxout(const UniValue& params, bool fHelp)
             "     \"hex\" : \"hex\",        (string) \n"
             "     \"reqSigs\" : n,          (numeric) Number of required signatures\n"
             "     \"type\" : \"pubkeyhash\", (string) The type, eg pubkeyhash\n"
-            "     \"addresses\" : [          (array of string) array of kubocoin addresses\n"
-            "     \"kubocoinaddress\"   	 	(string) kubocoin address\n"
+            "     \"addresses\" : [          (array of string) array of kuboCoin addresses\n"
+            "     \"kuboCoinaddress\"        (string) kuboCoin address\n"
             "        ,...\n"
             "     ]\n"
             "  },\n"

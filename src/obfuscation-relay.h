@@ -1,7 +1,5 @@
-// Copyright (c) 2014-2016 The Dash developers
-// Copyright (c) 2015-2019 The PIVX developers
-// Copyright (c) 2018-2019 The DogeCash developers
-// Copyright (c) 2018-2019 The KuboCoin developers
+// Copyright (c) 2014-2015 The Dash developers
+// Copyright (c) 2015-2017 The PIVX developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -13,12 +11,13 @@
 #include "masternodeman.h"
 
 
-class CObfuScationRelay
+class CObfuScationRelay : public CSignedMessage
 {
+private:
+    std::vector<unsigned char> vchSig2;
+
 public:
     CTxIn vinMasternode;
-    vector<unsigned char> vchSig;
-    vector<unsigned char> vchSig2;
     int nBlockHeight;
     int nRelayType;
     CTxIn in;
@@ -39,12 +38,22 @@ public:
         READWRITE(nRelayType);
         READWRITE(in);
         READWRITE(out);
+        try
+        {
+            READWRITE(nMessVersion);
+        } catch (...) {
+            nMessVersion = MessageVersion::MESS_VER_STRMESS;
+        }
     }
 
     std::string ToString();
 
-    bool Sign(std::string strSharedKey);
-    bool VerifyMessage(std::string strSharedKey);
+    // override CSignedMessage functions
+    uint256 GetSignatureHash() const override;
+    std::string GetStrMessage() const override;
+    const CTxIn GetVin() const override { return vinMasternode; };
+    bool Sign(std::string strSharedKey);   // use vchSig2
+
     void Relay();
     void RelayThroughNode(int nRank);
 };

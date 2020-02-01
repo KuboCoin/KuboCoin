@@ -1,31 +1,27 @@
-KuboCoin Core integration/staging repository
+kuboCoin Core integration/staging repository
 =====================================
-[![GitHub license](https://img.shields.io/github/license/kubocoin/kubocoin.svg)](https://github.com/kubocoin/kubocoin-explorer/blob/master/COPYING) [![Build Status](https://travis-ci.com/kubocoin/kubocoin.svg?branch=master)](https://travis-ci.com/kubocoin-crypto/kubocoin-explorer) [![Discord](https://img.shields.io/discord/479050479330918410.svg)](https://discord.gg/TaKpprv) [![GitHub version](https://badge.fury.io/gh/kubocoin%2Fkubocoin.svg)](https://badge.fury.io/gh/kubocoin%2Fkubocoin)
+[![Build history](https://buildstats.info/travisci/chart/kubocoin/kubocoin?branch=master)](https://travis-ci.org/kubocoin/kubocoin?branch=master)
 <br>
+[![GitHub license](https://img.shields.io/github/license/kubocoin/kubocoin.svg)](https://github.com/kubocoin/kubocoin-explorer/blob/master/COPYING) [![Build Status](https://travis-ci.com/kubocoin/kubocoin.svg?branch=master)](https://travis-ci.com/kubocoin-crypto/kubocoin-explorer) [![Discord](https://img.shields.io/discord/479050479330918410.svg)](http://discord.kubo.io/) [![GitHub version](https://badge.fury.io/gh/kubocoin%2Fkubocoin.svg)](https://badge.fury.io/gh/kubocoin%2Fkubocoin)
+<br>
+kuboCoin (KUBO) is a transparent, community-governed cryptocurrency aimed at preserving what makes DogeCoin unique while offering an alternative way for the average investor to get involved. This is done through the creation of DogeNodes, utilization of Proof of Stake, and active governance.
 
 
-KuboCoin is a payment processing system for effortless transfer of crypto funds into fiat or other crypto assets.
-
-To keep our tradition of transparency alive within our crypto communities, we ensured that we obtained KYD verification. Trust, honesty, and transparency explain the character of KUBO.
-
-Along with the implementation of crypto debit cards to simplify the end users experience of payment within the KUBO ecosystem, KUBO will also be implemented into an ATM network and support system. The point of sale terminal will be given through a mobile payment application provided by our partner, Aeryus. This will give you the opportunity to exchange KUBO for other crypto assets or buy/sell directly into fiat currencies.
-
-Our actions tell the world what Kubo is and what we stand for. We act ethically and responsibly in everything we do and hold ourselves accountable for our actions. We bring respect and honesty to our investors and our business partners and we strive to support the security and well-being of the entire Kubo community at all times. We treat all those we encounter with kindness and compassion and constantly strive to better understand and respond to the needs of our diverse community.
-
-The Kubo team has been and will continue to be completely open and honest with our community. The teams wallet information and the purpose for the funds that they hold is publically shared with the community. Our team is always happy to answer questions about the plans and progression of the Kubo project as well as inquiries about the team that is working so hard to make Kubo one of the most prominent and prestigious successes that cryptocurrency investors have seen thus far.
-
-When it comes to Kubo, only the best will do. As a team, we are working to create and engage in meaningful alliances to enhance access to services and technology that will assist in the development of new pathways to help pave the way for global adoption of digital currencies. The Kubo team works cohesively with each other to bring experience, knowledge, and advancing technology to the forefront in order to provide our community with the highest quality project and product possible. We devote ourselves to continuous improvement, excellence, professionalism and innovation in our work.
-
-For more info about KuboCoin project. Please goto our web site. [kubocoin.org](https://kubocoin.org)
+![kuboCoin Logo](https://kubo.io/assets/images/logo.svg)
 
 
-![KuboCoin Logo](https://i1.wp.com/kubocoin.org/wp-content/uploads/2019/05/Presentatie-LOGO-1.png?resize=300%2C292&ssl=1)
+You bring value to the long term success of the project, not how much money you have in your pocket. Become an integral part of the network with minimal investment.
 
+More information at [kubo.io](https://kubo.io) Visit our ANN thread at [BitcoinTalk](https://bitcointalk.org/index.php?topic=5039914.msg46278874)
 
 ### Coin Specs
 <table>
 <tr><td>Algo</td><td>Quark</td></tr>
+<tr><td>Block Time</td><td>60 Seconds</td></tr>
 <tr><td>Difficulty Retargeting</td><td>Every Block</td></tr>
-<tr><td>Pre-Min info (PoW Phase)</td><td>89.7B KUBO for Kubo erc20 to main chain swap</td></tr>
-
+<tr><td>Max Coin Supply (PoW Phase)</td><td>2,000,000 KUBO</td></tr>
+<tr><td>Max Coin Supply (PoS Phase)</td><td>21,000,000 KUBO</td></tr>
+<tr><td>Premine</td><td>5% of total supply</td></tr>
 </table>
+
+
